@@ -1,0 +1,74 @@
+{
+  "name": "@promotion-and-support/cat-and-dog-backend",
+  "version": "1.0.0",
+  "description": "service for promotion",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:front": "cd ../cat-and-dog-frontend && npm run build",
+    "start": "node js/src/index.js",
+    "pack": "npm run sync && npm run build:front && npm run rmassets && npm run sync",
+    "dev": "cross-env NODE_ENV=development nodemon js/src/index.js",
+    "debug": "nodemon --inspect js/src/index.js",
+    "test": "cross-env NODE_ENV=test node js/tests/app.test.js",
+    "tsc": "npm run rmjs && tsc --watch",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "db:setup": "cd src/db/setup && sh ./setup.sh",
+    "db:restore": "cd src/db/setup && sh ./restore.sh",
+    "db:migration": "cd src/db/setup && sh ./migration.sh",
+    "db:heroku:setup": "cd src/db/setup/heroku && sh ./setup.heroku.sh",
+    "db:heroku:restore": "cd src/db/setup/heroku && sh ./restore.heroku.sh",
+    "db:heroku:migration": "cd src/db/setup/heroku && sh ./migration.heroku.sh",
+    "dkr:build": "docker build -t ynw .",
+    "dkr:run": "docker run -d -p 5432:5432 --name ynw ynw",
+    "dkr:stop": "docker stop ynw",
+    "sync": "npm run rmjs && npm run build && cross-env RUN_ONCE=true PORT=8001 npm start && node src/scripts/js/sync.back.front.js",
+    "copy:tofront": "node src/scripts/js/copy.all.to.front.js",
+    "copy:toback": "node src/scripts/js/copy.all.to.back.js",
+    "rmjs": "node src/scripts/js/remove.js.js",
+    "rmassets": "node src/scripts/js/remove.assets.js",
+    "tunel": "node scripts/tunel.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/promotion-and-support/cat-and-dog-backend"
+  },
+  "keywords": [
+    "promotion",
+    "support",
+    "cat",
+    "dog"
+  ],
+  "author": "Mykhailo Vaskivnyuk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/promotion-and-support/cat-and-dog-backend/issues"
+  },
+  "homepage": "https://github.com/promotion-and-support/cat-and-dog-backend#readme",
+  "devDependencies": {
+    "@types/telegram-web-app": "^6.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.24.0",
+    "eslint-plugin-import": "^2.26.0",
+    "ngrok": "^5.0.0-beta.2",
+    "nodemon": "^2.0.20",
+    "prettier": "^3.4.2"
+  },
+  "dependencies": {
+    "@types/node": "^22.5.0",
+    "@types/nodemailer": "^6.4.6",
+    "@types/pg": "^8.6.5",
+    "@types/ws": "^8.5.3",
+    "grammy": "^1.16.1",
+    "joi": "^17.6.2",
+    "nodemailer": "^6.8.0",
+    "pg": "^8.8.0",
+    "pino": "^8.6.1",
+    "pino-pretty": "^9.1.1",
+    "typescript": "^4.8.4",
+    "ws": "^8.10.0"
+  }
+}
