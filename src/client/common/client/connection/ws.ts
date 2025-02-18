@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { EventEmitter } from '@lib/event-emitter/event.emitter';
 import { TPromiseExecutor } from '../../types';
 import { IWsResponse, TFetch } from './types';
 import {
@@ -8,7 +9,6 @@ import {
 } from '../constants';
 import { PING_INTERVAL } from '../../server/constants';
 import { HttpResponseError } from './errors';
-import { EventEmitter } from '../lib/event.emitter';
 import { logData, delay } from './utils';
 
 class WsConnection extends EventEmitter {
@@ -33,8 +33,8 @@ class WsConnection extends EventEmitter {
     if (!this.connecting) return;
     const executor: TPromiseExecutor<void> = (rv, rj) => {
       const timeout = setTimeout(() => {
-        this.remove('connection', rv);
-        this.remove('error', rj);
+        this.off('connection', rv);
+        this.off('error', rj);
         rj(new HttpResponseError(503));
       }, CONNECTION_TIMEOUT);
 
