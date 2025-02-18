@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-lines */
 import { TPromiseExecutor } from '../../types';
 import { IWsResponse, TFetch } from './types';
 import {

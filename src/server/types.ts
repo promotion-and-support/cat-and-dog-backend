@@ -1,5 +1,4 @@
 import http from 'node:http';
-import { IMessage, MessageTypeKeys } from '../client/common/server/types/types';
 import { IOperation, TOperationResponse } from '../types/operation.types';
 import { IHttpConfig, IHttpServer } from './http/types';
 import { IWsConfig, IWsServer } from './ws/types';
@@ -27,8 +26,8 @@ export interface IInputConnection {
 export type IServer = IHttpServer | IWsServer | ITgServer;
 export type IRequest = http.IncomingMessage;
 export interface IConnectionService {
-  sendMessage: <T extends MessageTypeKeys>(
-    data: IMessage<T>,
+  sendMessage: (
+    data: Record<string, string>,
     connectionIds?: Set<number>,
   ) => Promise<boolean>;
   sendNotification: (chatId: string) => Promise<boolean>;

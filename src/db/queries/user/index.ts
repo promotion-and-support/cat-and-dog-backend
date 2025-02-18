@@ -1,10 +1,7 @@
 /* eslint-disable max-lines */
 import { ITableUsers } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
-import { IQueriesUserNetData } from './netData';
-import { IQueriesUserNets } from './nets';
 import { IQueriesUserToken } from './token';
-import { IQueriesUserEvents } from './events';
 import { IQueriesUserMessenger } from './messenger';
 
 export interface IQueriesUser {
@@ -28,10 +25,7 @@ export interface IQueriesUser {
     ],
     ITableUsers
   >;
-  netData: IQueriesUserNetData;
-  nets: IQueriesUserNets;
   token: IQueriesUserToken;
-  events: IQueriesUserEvents;
   messenger: IQueriesUserMessenger;
 }
 

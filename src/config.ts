@@ -77,7 +77,6 @@ const config: IConfig = {
       'checkAuthorized',
       'getStream',
       'validateInput',
-      'setUserNet',
     ],
     outputModules: ['validateOutput'],
     modulesConfig: {

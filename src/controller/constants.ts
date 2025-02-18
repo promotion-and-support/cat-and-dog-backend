@@ -5,7 +5,6 @@ export const INPUT_MODULES_MAP = {
   checkAuthorized: 'checkAuthorized.js',
   getStream: 'get.stream.js',
   validateInput: 'validate.input.js',
-  setUserNet: 'set.user.net.js',
 };
 export type TInputModulesKeys = keyof typeof INPUT_MODULES_MAP;
 

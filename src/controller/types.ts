@@ -19,7 +19,6 @@ import {
   TOutputModulesKeys,
   TServicesKeys,
 } from './constants';
-import { Member } from '../domain/member/member';
 
 export interface IControllerConfig {
   path: string;
@@ -82,7 +81,6 @@ export type THandlerSchema = THandler['responseSchema' | 'paramsSchema'];
 export type IContext = {
   session: Session<ISessionContent>;
   origin: string;
-  member?: Member;
   connectionId?: number;
   isAdmin?: boolean;
 };

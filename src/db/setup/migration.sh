@@ -1,10 +1,10 @@
 echo 'start'
 
 export PGCLIENTENCODING=utf8
-export PGPASSWORD=merega
-USER=merega
-DATABASE=merega
+export PGPASSWORD=cat_and_dog
+USER=cat_and_dog
+DATABASE=cat_and_dog
 
-psql -d $DATABASE -f migrations/alter.members.to.members.sql -U $USER
+psql -d $DATABASE -f migrations/?.sql -U $USER
 
 echo 'end'

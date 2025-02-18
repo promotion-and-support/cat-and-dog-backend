@@ -7,7 +7,7 @@ USER=merega
 # export PGPASSWORD=postgres
 psql -f create.sql -U postgres
 
-export PGPASSWORD=merega
+export PGPASSWORD=cat_and_dog
 psql -d $DATABASE -f backup.sql -U $USER
 
 echo 'end'

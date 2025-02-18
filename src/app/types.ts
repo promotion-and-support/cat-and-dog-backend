@@ -5,7 +5,6 @@ import { IController } from '../controller/types';
 import { IInputConnection, IConnectionService } from '../server/types';
 import { IMailService } from '../services/mail/types';
 import App from './app';
-import { IDomain } from '../domain';
 
 export type IAppThis = App & {
   config: IConfig;
@@ -22,7 +21,7 @@ export interface IControllerContext {
   startTransaction: IDatabase['startTransaction'];
   logger: ILogger;
   connectionService: IConnectionService;
-  messengerService: IConnectionService;
+  // messengerService: IConnectionService;
   console?: typeof console;
   env?: IConfig['env'];
 }
@@ -36,7 +35,6 @@ export interface IGlobalMixins {
   cryptoService: typeof import('../utils/crypto');
   mailService: IMailService;
   env: IConfig['env'];
-  domain: IDomain;
 }
 
 declare global {
@@ -48,5 +46,4 @@ declare global {
   const cryptoService: typeof import('../utils/crypto');
   const mailService: IMailService;
   const env: IConfig['env'];
-  const domain: IDomain;
 }

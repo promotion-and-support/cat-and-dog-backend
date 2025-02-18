@@ -1,11 +1,6 @@
 import { THandleOperation } from '../../types/operation.types';
-import {
-  IMessage,
-  MessageTypeKeys,
-} from '../../client/common/server/types/messages.types';
 import { IInputConnection, IServer } from '../types';
 import { ILinkConnection } from './types';
-import { MAX_CHAT_INDEX } from '../../constants/constants';
 import { createUnicCode } from '../../utils/crypto';
 import { excludeNullUndefined } from '../../utils/utils';
 
@@ -15,9 +10,9 @@ class LinkConnection implements IInputConnection {
   private static connections = new Map<number, ILinkConnection>();
 
   static getClient(onMessage: ILinkConnection['onMessage']) {
-    const connection = { onMessage };
+    // const connection = { onMessage };
     const sessionKey = createUnicCode(10);
-    const connectionId = LinkConnection.getConnectionId(connection);
+    // const connectionId = LinkConnection.getConnectionId(connection);
 
     const handleRequest = (
       name: string,
@@ -27,7 +22,7 @@ class LinkConnection implements IInputConnection {
         options: {
           sessionKey,
           origin: 'localhost',
-          connectionId,
+          // connectionId,
         },
         names: name.split('/').filter(Boolean),
         data: { params },
@@ -55,20 +50,20 @@ class LinkConnection implements IInputConnection {
     return;
   }
 
-  private static getConnectionId(connection: ILinkConnection) {
-    const { counter, connections } = LinkConnection;
-    const connectionId = (counter % MAX_CHAT_INDEX) + 1;
-    LinkConnection.counter = connectionId;
-    connections.set(connectionId, connection);
-    return connectionId;
-  }
+  // private static getConnectionId(connection: ILinkConnection) {
+  //   const { counter, connections } = LinkConnection;
+  //   const connectionId = (counter % MAX_CHAT_INDEX) + 1;
+  //   LinkConnection.counter = connectionId;
+  //   connections.set(connectionId, connection);
+  //   return connectionId;
+  // }
 
   private static getConnection(connectionId: number) {
     return LinkConnection.connections.get(connectionId);
   }
 
-  private static async sendMessage<T extends MessageTypeKeys>(
-    data: IMessage<T>,
+  private static async sendMessage(
+    data: Record<string, string>,
     connectionIds?: Set<number>,
   ) {
     if (!connectionIds) return false;

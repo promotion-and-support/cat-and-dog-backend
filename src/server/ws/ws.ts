@@ -4,12 +4,7 @@ import { IInputConnection, IRequest } from '../types';
 import { IWsConfig, IWsConnection, IWsServer, TWsResModule } from './types';
 import { IOperation, TOperationResponse } from '../../types/operation.types';
 import { IHttpServer } from '../http/types';
-import {
-  IMessage,
-  MessageTypeKeys,
-} from '../../client/common/server/types/types';
 import { PING_INTERVAL } from '../../client/common/server/constants';
-import { MAX_CHAT_INDEX } from '../../constants/constants';
 import { ServerError } from '../errors';
 import { handleError } from './methods/handle.error';
 import { applyResModules } from './methods/utils';
@@ -113,11 +108,12 @@ class WsConnection implements IInputConnection {
     }
   }
 
-  private getConnectionId(connection: IWsConnection) {
-    const connectionId = (this.counter = (this.counter % MAX_CHAT_INDEX) + 1);
-    this.connections.set(connectionId, connection);
-    return connectionId;
-  }
+  // private getConnectionId(connection: IWsConnection) {
+  //   const connectionId =
+  //     (this.counter = (this.counter % MAX_CHAT_INDEX) + 1);
+  //   this.connections.set(connectionId, connection);
+  //   return connectionId;
+  // }
 
   private getConnection(connectionId: number) {
     return this.connections.get(connectionId);
@@ -131,7 +127,7 @@ class WsConnection implements IInputConnection {
     const options: IOperation['options'] = {
       sessionKey: getSessionKey(req),
       origin,
-      connectionId: this.getConnectionId(connection),
+      // connectionId: this.getConnectionId(connection),
     };
     return options;
   }
@@ -173,8 +169,8 @@ class WsConnection implements IInputConnection {
     this.isAlive = true;
   }
 
-  private async sendMessage<T extends MessageTypeKeys>(
-    data: IMessage<T>,
+  private async sendMessage(
+    data: Record<string, string>,
     connectionIds?: Set<number>,
   ) {
     try {
