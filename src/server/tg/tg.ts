@@ -6,9 +6,6 @@ import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
 
-const TEST_URL =
-  'https://mykhailo-vaskivnyuk.github.io/telegram-web-app-bot-example/index.html';
-
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;
   private server: ITgServer;
@@ -19,8 +16,6 @@ class TgConnection implements IInputConnection {
     this.server.on('message', this.handleRequest.bind(this));
     this.server.catch(this.handleError.bind(this));
     this.origin = this.config.origin || 'https://example.com';
-    // this.server.api.setChatMenuButton();
-    // this.server.callbackQuery('open-app', () => console.log('HERE'));
   }
 
   onOperation(cb: THandleOperation) {
@@ -76,7 +71,7 @@ class TgConnection implements IInputConnection {
       }
     }
 
-    const testBtn = [{ text: 'Open TestApp', web_app: { url: TEST_URL } }];
+    const testBtn = [{ text: 'Open TestApp', web_app: { url: this.origin } }];
     const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
     if (this.config.dev) btns.push(testBtn);
     const inlineKyeboard = new InlineKeyboard(btns);

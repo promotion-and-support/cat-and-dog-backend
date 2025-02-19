@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import { IControllerContext } from './types';
 import { IConfig } from '../types/config.types';
-// import { IOperation } from '../types/operation.types';
+import { IOperation } from '../types/operation.types';
 import { ILogger } from '../logger/types';
 import { IDatabase } from '../db/types/types';
 import { IController } from '../controller/types';
@@ -9,7 +9,7 @@ import { IInputConnection } from '../server/types';
 import {
   AppError,
   handleAppInitError,
-  // handleOperationError,
+  handleOperationError,
   setUncaughtErrorHandlers,
 } from './errors';
 import { setToGlobal } from './methods/utils';
@@ -42,12 +42,12 @@ export default class App {
       logger.info('DATABASE IS READY');
       this.setInputConnection();
       logger.info('SERVER IS READY TO START');
-      // this.setMessenger();
-      // logger.info('MESSENGER IS READY TO START');
+      this.setMessenger();
+      logger.info('MESSENGER IS READY TO START');
       await this.setController();
       logger.info('CONTROLLER IS READY');
-      // await this.messenger!.start();
-      // logger.info('MESSENGER IS RUNNING');
+      await this.messenger!.start();
+      logger.info('MESSENGER IS RUNNING');
       this.apiServer && (await this.apiServer.start());
       await this.server!.start();
       logger.info('SERVER IS RUNNING');
@@ -94,18 +94,18 @@ export default class App {
     const server = this.apiServer || this.server;
     if (!server) throw new AppError('INIT_ERROR', 'SERVER is not INITIALIZED');
 
-    // if (!this.messenger)
-    //   throw new AppError('INIT_ERROR', 'MESSENGER is not INITIALIZED');
+    if (!this.messenger)
+      throw new AppError('INIT_ERROR', 'MESSENGER is not INITIALIZED');
 
     const connectionService = server.getConnectionService();
-    // const messengerService = this.messenger!.getConnectionService();
+    const messengerService = this.messenger!.getConnectionService();
     const { controller, env } = this.config;
     const context: IControllerContext = {
       logger,
       execQuery,
       startTransaction: () => this.db!.startTransaction(),
       connectionService,
-      // messengerService,
+      messengerService,
       console,
       env,
     };
@@ -114,20 +114,20 @@ export default class App {
     return this;
   }
 
-  // private setMessenger() {
-  //   const { tg } = this.config.inConnection;
-  //   const Messenger = require(tg.path);
-  //   this.messenger = new Messenger(tg);
+  private setMessenger() {
+    const { tg } = this.config.inConnection;
+    const Messenger = require(tg.path);
+    this.messenger = new Messenger(tg);
 
-  //   const handleOperation = async (operation: IOperation) => {
-  //     try {
-  //       return await this.controller!.exec(operation);
-  //     } catch (e: any) {
-  //       return handleOperationError(e);
-  //     }
-  //   };
+    const handleOperation = async (operation: IOperation) => {
+      try {
+        return await this.controller!.exec(operation);
+      } catch (e: any) {
+        return handleOperationError(e);
+      }
+    };
 
-  //   this.messenger!.onOperation(handleOperation);
-  //   return this;
-  // }
+    this.messenger!.onOperation(handleOperation);
+    return this;
+  }
 }

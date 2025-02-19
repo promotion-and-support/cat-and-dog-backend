@@ -21,7 +21,7 @@ export interface IControllerContext {
   startTransaction: IDatabase['startTransaction'];
   logger: ILogger;
   connectionService: IConnectionService;
-  // messengerService: IConnectionService;
+  messengerService: IConnectionService;
   console?: typeof console;
   env?: IConfig['env'];
 }
