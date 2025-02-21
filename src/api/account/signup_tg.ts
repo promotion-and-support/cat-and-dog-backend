@@ -3,7 +3,7 @@ import { IUserResponse } from '../../client/common/server/types/types';
 import { THandler } from '../../controller/types';
 import { UserResponseSchema } from '../schema/schema';
 
-const signupTg: THandler<{ initData: string }, IUserResponse> = async (
+const signup_tg: THandler<{ initData: string }, IUserResponse> = async (
   { session },
   { initData },
 ) => {
@@ -22,8 +22,8 @@ const signupTg: THandler<{ initData: string }, IUserResponse> = async (
   session.write('user_status', user_status);
   return { ...user!, user_status };
 };
-signupTg.paramsSchema = { initData: Joi.string().required() };
-signupTg.responseSchema = UserResponseSchema;
-signupTg.allowedForUser = 'NOT_LOGGEDIN';
+signup_tg.paramsSchema = { initData: Joi.string().required() };
+signup_tg.responseSchema = UserResponseSchema;
+signup_tg.allowedForUser = 'NOT_LOGGEDIN';
 
-export = signupTg;
+export = signup_tg;

@@ -6,5 +6,6 @@
 6. adjust backend minimal configs and functionality
 7. adjust frontend minimal configs and functionality
 8. create tg bot
-9. create heroku unit
-10. run 'helo world' project
+9. account api
+10. create heroku unit
+11. run 'helo world' project

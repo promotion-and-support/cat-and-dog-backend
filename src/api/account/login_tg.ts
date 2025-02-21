@@ -6,7 +6,7 @@ import {
 } from '../../client/common/server/types/types';
 import { UserResponseSchema } from '../schema/schema';
 
-const overtg: THandler<{ initData: string }, IUserResponse> = async (
+const login_tg: THandler<{ initData: string }, IUserResponse> = async (
   { session },
   { initData },
 ) => {
@@ -23,8 +23,8 @@ const overtg: THandler<{ initData: string }, IUserResponse> = async (
   session.write('user_status', user_status);
   return { ...user, user_status };
 };
-overtg.paramsSchema = { initData: Joi.string().required() };
-overtg.responseSchema = UserResponseSchema;
-overtg.allowedForUser = 'NOT_LOGGEDIN';
+login_tg.paramsSchema = { initData: Joi.string().required() };
+login_tg.responseSchema = UserResponseSchema;
+login_tg.allowedForUser = 'NOT_LOGGEDIN';
 
-export = overtg;
+export = login_tg;

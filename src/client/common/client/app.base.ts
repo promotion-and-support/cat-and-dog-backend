@@ -5,8 +5,10 @@ export interface IAppBase {
   firstService: FirstService;
 };
 
+const initialState = { data: '' };
+
 export class AppBase extends Store implements IAppBase {
-  firstService: FirstService = new FirstService({ value: 'Hello, World!', }, this);
+  firstService: FirstService = new FirstService(initialState, this);
 
   constructor() {
     super({}, undefined, 'INIT');
