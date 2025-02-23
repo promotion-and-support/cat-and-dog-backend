@@ -1,0 +1,35 @@
+html,
+body,
+#root,
+.apploading {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.apploading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.apploading svg {
+  fill: #2e7bb3;
+  width: 100px;
+  height: 100px;
+  animation-name: loading;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.apploading svg g:first-child {
+  fill: #fc7b03;
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);
+  }
+}

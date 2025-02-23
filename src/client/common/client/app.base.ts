@@ -3,7 +3,7 @@ import { FirstService } from './services/first.service';
 
 export interface IAppBase {
   firstService: FirstService;
-};
+}
 
 const initialState = { data: '' };
 
@@ -13,7 +13,7 @@ export class AppBase extends Store implements IAppBase {
   constructor() {
     super({}, undefined, 'INIT');
   }
-  
+
   async init() {
     await this.firstService.init();
     this.setState({ status: 'READY' });

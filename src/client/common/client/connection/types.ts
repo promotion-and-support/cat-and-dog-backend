@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpResponseErrorCode } from './errors';
 
 export type TFetch = <T>(pathname: string, options?: Record<string, any>) => Promise<T>;

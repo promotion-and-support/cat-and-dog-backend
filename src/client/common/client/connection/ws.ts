@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EventEmitter } from '@lib/event-emitter/event.emitter';
 import { TPromiseExecutor } from '../../types';
 import { IWsResponse, TFetch } from './types';
@@ -58,7 +57,9 @@ class WsConnection extends EventEmitter {
     }
     if (readyState !== CONNECTING) this.createSocket();
     this.attempts += 1;
-    this.socket.addEventListener('error', () => { this.handleError().catch(() => {}); });
+    this.socket.addEventListener('error', () => {
+      this.handleError().catch(() => {});
+    });
     this.socket.addEventListener('open', () => this.handleOpen());
     this.socket.addEventListener('message', (event: MessageEvent) => this.handleMessage(event));
   }
@@ -109,7 +110,7 @@ class WsConnection extends EventEmitter {
     await this.checkConnection();
     const requestId = this.genId();
     const request = { requestId, pathname, data };
-    if(doLog) logData(request, 'REQ');
+    if (doLog) logData(request, 'REQ');
     const message = JSON.stringify(request);
     const requestExecutor = this.createRequestExecutor(message);
     return new Promise(requestExecutor);
@@ -152,6 +153,5 @@ export const getConnection = (
   const connection = new WsConnection(baseUrl);
   connection.on('connection', onConnection);
   connection.on('message', onMessage);
-  // eslint-disable-next-line @typescript-eslint/unbound-method
   return connection.sendRequest;
 };
