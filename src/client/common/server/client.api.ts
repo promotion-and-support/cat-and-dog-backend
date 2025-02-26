@@ -20,13 +20,13 @@ export const getApi = (
     'login': (options: P.ILoginParams) =>
       fetch<P.IUserResponse>('/account/login', options),
 
+    'login_tg': (options: Q.TAccountLogin_tg) =>
+      fetch<P.IUserResponse>('/account/login_tg', options),
+
     'logout': () => fetch<boolean>('/account/logout'),
 
     'overmail': (options: P.IEnterParams) =>
       fetch<boolean>('/account/overmail', options),
-
-    'overtg': (options: Q.TAccountOvertg) =>
-      fetch<P.IUserResponse>('/account/overtg', options),
 
     'remove': () => fetch<boolean>('/account/remove'),
 
@@ -36,8 +36,8 @@ export const getApi = (
     'signup': (options: P.ISignupParams) =>
       fetch<P.IUserResponse>('/account/signup', options),
 
-    'signupTg': (options: Q.TAccountSignupTg) =>
-      fetch<P.IUserResponse>('/account/signupTg', options),
+    'signup_tg': (options: Q.TAccountSignup_tg) =>
+      fetch<P.IUserResponse>('/account/signup_tg', options),
 
     'messenger': {
       'get': {

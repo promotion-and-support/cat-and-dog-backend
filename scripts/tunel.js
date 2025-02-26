@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 const ngrok = require('@ngrok/ngrok');
+const http = require('node:http');
 
-module.exports = async function startTunel(port) {
+async function startTunel(port) {
   const config = {
     proto: 'http', // http|tcp|tls, defaults to http
     addr: port, // port or network address, defaults to 80
@@ -19,4 +20,13 @@ module.exports = async function startTunel(port) {
   const url = listener.url();
 
   return url;
-};
+}
+
+const server = http.createServer(() => {
+  console.log('REQUEST');
+});
+
+server.listen(3001, async () => {
+  const url = await startTunel(8000);
+  console.log(url);
+});

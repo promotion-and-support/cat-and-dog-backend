@@ -1,8 +1,8 @@
 echo 'start'
 
 export PGCLIENTENCODING=utf8
-DATABASE=merega
-USER=merega
+DATABASE=cat_and_dog
+USER=cat_and_dog
 
 # export PGPASSWORD=postgres
 psql -f create.sql -U postgres

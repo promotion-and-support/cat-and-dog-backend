@@ -13,7 +13,8 @@ import {
 import { PING_INTERVAL } from '../../src/client/common/server/constants';
 // eslint-disable-next-line max-len
 import { HttpResponseError } from '../../src/client/common/client/connection/errors';
-import { EventEmitter } from '../../src/client/common/client/lib/event.emitter';
+// eslint-disable-next-line max-len
+import { EventEmitter } from '../../src/client/common/client/lib/event-emitter/event.emitter';
 import { delay } from '../../src/client/common/client/connection/utils';
 import { createUnicCode } from '../../src/utils/crypto';
 
@@ -43,8 +44,8 @@ class WsConnection extends EventEmitter {
     if (!this.connecting) return;
     const executor: TPromiseExecutor<void> = (rv, rj) => {
       const timeout = setTimeout(() => {
-        this.remove('connection', rv);
-        this.remove('error', rj);
+        this.off('connection', rv);
+        this.off('error', rj);
         rj(new HttpResponseError(503));
       }, CONNECTION_TIMEOUT);
 

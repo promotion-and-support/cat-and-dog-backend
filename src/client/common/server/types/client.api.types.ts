@@ -1,9 +1,9 @@
 import * as P from './types';
 
-export type TAccountOvertg = {
+export type TAccountLogin_tg = {
   initData: string;
 };
-export type TAccountSignupTg = {
+export type TAccountSignup_tg = {
   initData: string;
 };
 export type TAccountMessengerLinkGetResponse = string | null;
