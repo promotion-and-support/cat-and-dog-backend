@@ -7,5 +7,8 @@
 7. adjust frontend minimal configs and functionality
 8. create tg bot
 9. account api
-10. create heroku unit
-11. run 'helo world' project
+10. run 'helo world' project
+11. create subsribtion endpoint
+12. create notification endpoint and sheduler
+13. create write message endpoint
+14. create heroku unit

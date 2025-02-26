@@ -4,7 +4,7 @@ import { logData } from './utils';
 import { HttpResponseErrorCode, HttpResponseError } from './errors';
 
 export const getConnection =
-  (baseUrl: string) =>
+  (baseUrl: string, onError?: (e: unknown) => void) =>
   async (url: string, data: Record<string, any> = {}) => {
     logData(data, 'REQ');
     const options: RequestInit = {
@@ -22,6 +22,7 @@ export const getConnection =
       return responseData;
     } catch (e) {
       console.log(e);
+      onError?.(e);
       throw e;
     }
   };

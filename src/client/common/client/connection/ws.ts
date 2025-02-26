@@ -1,4 +1,4 @@
-import { EventEmitter } from '@lib/event-emitter/event.emitter';
+import { EventEmitter } from '../lib/event-emitter/event.emitter';
 import { TPromiseExecutor } from '../../types';
 import { IWsResponse, TFetch } from './types';
 import {
@@ -149,9 +149,14 @@ export const getConnection = (
   baseUrl: string,
   onConnection: () => void,
   onMessage: (data: any) => void,
+  onError?: (e: unknown) => void,
 ): TFetch => {
   const connection = new WsConnection(baseUrl);
   connection.on('connection', onConnection);
   connection.on('message', onMessage);
-  return connection.sendRequest;
+  return (...args) =>
+    connection.sendRequest(...args).catch((e) => {
+      onError?.(e);
+      throw e;
+    });
 };
