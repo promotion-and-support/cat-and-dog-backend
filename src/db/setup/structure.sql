@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.7
+-- Dumped from database version 16.8
 -- Dumped by pg_dump version 16.3
 
 SET statement_timeout = 0;
@@ -48,6 +48,19 @@ ALTER TABLE public.sessions ALTER COLUMN session_id ADD GENERATED ALWAYS AS IDEN
     CACHE 1
 );
 
+
+--
+-- Name: subscriptions; Type: TABLE; Schema: public; Owner: cat_and_dog
+--
+
+CREATE TABLE public.subscriptions (
+    user_id bigint NOT NULL,
+    type character varying NOT NULL,
+    sent_date timestamp without time zone
+);
+
+
+ALTER TABLE public.subscriptions OWNER TO cat_and_dog;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: cat_and_dog
@@ -98,6 +111,14 @@ ALTER TABLE public.users ALTER COLUMN user_id ADD GENERATED ALWAYS AS IDENTITY (
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT pk_sessions PRIMARY KEY (session_id);
+
+
+--
+-- Name: subscriptions pk_subscriptions; Type: CONSTRAINT; Schema: public; Owner: cat_and_dog
+--
+
+ALTER TABLE ONLY public.subscriptions
+    ADD CONSTRAINT pk_subscriptions PRIMARY KEY (user_id);
 
 
 --
@@ -167,6 +188,14 @@ CREATE UNIQUE INDEX users_tokens_token_idx ON public.users_tokens USING btree (t
 
 ALTER TABLE ONLY public.sessions
     ADD CONSTRAINT fk_sessions_user FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
+
+
+--
+-- Name: subscriptions fk_subscribtions_users; Type: FK CONSTRAINT; Schema: public; Owner: cat_and_dog
+--
+
+ALTER TABLE ONLY public.subscriptions
+    ADD CONSTRAINT fk_subscribtions_users FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
 
 
 --

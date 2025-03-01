@@ -1,8 +1,8 @@
-/* eslint-disable max-lines */
 export const TABLES_MAP = {
   USERS: 'users',
   USERS_TOKENS: 'users_tokens',
   SESSIONS: 'sessions',
+  SUBSCRIPTIONS: 'subscriptions',
 };
 
 export type OuterJoin<T> = { [key in keyof T]: T[key] | null };
@@ -28,4 +28,10 @@ export type ITableSessions = {
   session_key: string;
   session_value: string;
   updated: string;
+};
+
+export type ITableSubscriptions = {
+  user_id: number;
+  type: string;
+  date: Date | null;
 };

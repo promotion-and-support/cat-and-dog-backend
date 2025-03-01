@@ -31,5 +31,12 @@ Table "sessions" {
   // }
 }
 
+Table "subscriptions" {
+  "user_id" bigint [primary key, not null]
+  "type" "character varying" [not null]
+  "date" timestamp [default: NULL]
+}
+
 Ref "fk_users_tokens_user":"users"."user_id" < "users_tokens"."user_id" [delete: cascade]
 Ref "fk_sessions_user":"users"."user_id" < "sessions"."user_id" [delete: cascade]
+Ref "fk_subscriptions_user":"users"."user_id" < "subscriptions"."user_id" [delete: cascade]

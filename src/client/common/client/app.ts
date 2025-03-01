@@ -5,16 +5,19 @@ import { getConnection as getHttpConnection } from './connection/http';
 import { getConnection as getWsConnection } from './connection/ws';
 import { HttpResponseError } from './connection/errors';
 import { Account } from './services/account.service';
+import { Subscription } from './services/subscription.service';
 
 export interface IApp {
   api: IClientApi;
   account: Account;
+  subscription: Subscription;
 }
 
 export class App extends Store implements IApp {
   private baseUrl = API_URL;
   api: IClientApi;
   account: Account = new Account(this);
+  subscription: Subscription = new Subscription(this);
 
   constructor() {
     super({}, undefined, 'INIT');
@@ -46,6 +49,7 @@ export class App extends Store implements IApp {
 
     try {
       await this.account.init();
+      await this.subscription.init();
       this.setState({ status: 'READY' });
     } catch (e: any) {
       this.setError(e);

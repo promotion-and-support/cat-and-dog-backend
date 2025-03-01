@@ -23,6 +23,9 @@ export class Account extends Store<AccountState> {
 
   async init() {
     await this.login();
+    if (!this.$state.user) {
+      await this.signupTg();
+    }
   }
 
   async signupTg() {
@@ -31,7 +34,6 @@ export class Account extends Store<AccountState> {
     if (user) {
       this.setState({ user });
     }
-    return user;
   }
 
   async login() {
@@ -40,7 +42,6 @@ export class Account extends Store<AccountState> {
     if (user) {
       this.setState({ user });
     }
-    return user;
   }
 
   async logoutOrRemove(type: 'logout' | 'remove') {
