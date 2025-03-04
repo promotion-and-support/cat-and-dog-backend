@@ -1,10 +1,12 @@
 import { ITableSubscriptions } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
+import { IQueriesSubscriptionSend } from './send';
 
 export interface IQueriesSubscription {
   get: TQuery<[['user_id', number]], ITableSubscriptions>;
   update: TQuery<[['user_id', number], ['type', string]], ITableSubscriptions>;
   remove: TQuery<[['user_id', number]]>;
+  send: IQueriesSubscriptionSend;
 }
 
 export const get = `

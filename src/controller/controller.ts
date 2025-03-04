@@ -21,6 +21,7 @@ import { createRoutes } from './methods/create.endpoints';
 import { setToGlobal } from '../app/methods/utils';
 import { pathToArray } from '../utils/utils';
 import * as cryptoService from '../utils/crypto';
+import * as domain from '../domain/index';
 
 class Controller implements IController {
   private endpoints?: IEndpoints;
@@ -35,6 +36,7 @@ class Controller implements IController {
       const services = getServices(this.config);
       Object.assign(globalThis, services);
       setToGlobal('cryptoService', cryptoService);
+      setToGlobal('domain', domain);
     } catch (e: any) {
       logger.error(e);
       throw new ControllerError('SERVICE_ERROR');

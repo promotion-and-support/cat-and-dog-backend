@@ -53,6 +53,10 @@ export const getApi = (
       },
     },
   },
+  'bot': {
+    'message': () => fetch<boolean>('/bot/message'),
+
+  },
   'subscription': {
     'get': () => fetch<Q.TSubscriptionGetResponse>('/subscription/get'),
 
@@ -60,6 +64,8 @@ export const getApi = (
       fetch<boolean>('/subscription/update', options),
 
     'remove': () => fetch<boolean>('/subscription/remove'),
+
+    'sending': () => fetch<boolean>('/subscription/sending'),
 
   },
   'user': {

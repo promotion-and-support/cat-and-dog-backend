@@ -30,5 +30,5 @@ export interface IConnectionService {
     data: Record<string, string>,
     connectionIds?: Set<number>,
   ) => Promise<boolean>;
-  sendNotification: (chatId: string) => Promise<boolean>;
+  sendNotification: (chatId: string, message?: string) => Promise<boolean>;
 }

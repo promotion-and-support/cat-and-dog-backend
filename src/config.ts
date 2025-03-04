@@ -71,7 +71,7 @@ const config: IConfig = {
     servicesPath: resolvePath('services'),
     modulesPath: resolvePath('controller/modules'),
     clientApiPath: resolve('src/client/common/server/client.api.ts'),
-    services: ['mailService'],
+    services: ['mailService', 'notificationService'],
     inputModules: [
       'setSession',
       'checkAuthorized',
@@ -82,7 +82,13 @@ const config: IConfig = {
     modulesConfig: {
       mailService: mailConfig,
     },
-    tasks: [],
+    tasks: [
+      {
+        path: 'subscription/sending',
+        params: {},
+        interval: 5_000,
+      },
+    ],
   },
   inConnection: {
     transport,

@@ -8,21 +8,32 @@ const getUrlFromArg = (origin: string, token: string) => {
 };
 
 export const getOparation = (ctx: Context, origin: string) => {
-  const { chat, message } = ctx;
+  const { chat, message, editedMessage } = ctx;
   const chatId = chat?.id.toString();
   if (!chatId) return;
-  const { text } = message || {};
+  const { text, message_id = 0 } = message || editedMessage || {};
   if (!text) return;
-  const token = text.match(/^\/start (.+)$/)?.[1];
-  if (!token) return;
+  if (/^\/start$/.test(text)) {
+    return;
+  }
+  const startParam = text.match(/^\/start (.+)$/)?.[1];
+  if (startParam) {
+    const url = getUrlFromArg(origin, startParam);
 
-  const url = getUrlFromArg(origin, token);
+    const operation = {
+      options: { sessionKey: 'messenger', origin: 'https://t.me' },
+      names: 'account/messenger/link/connect'.split('/'),
+      data: { params: { chatId, token: startParam } },
+    };
+
+    return url ? { url } : { operation };
+  }
 
   const operation = {
     options: { sessionKey: 'messenger', origin: 'https://t.me' },
-    names: 'account/messenger/link/connect'.split('/'),
-    data: { params: { chatId, token } },
+    names: 'bot/message'.split('/'),
+    data: { params: { chatId, text, message_id, update: !!editedMessage } },
   };
 
-  return url ? { url } : { operation };
+  return { operation };
 };
