@@ -47,6 +47,6 @@ export class Subscription extends Store<SubscriptionServiceState> {
 
   async remove(subscription?: T.IUpdateSubscription) {
     await this.app.api.subscription.remove(subscription || { subject: null });
-    this.setState({ subscriptions: getState() });
+    await this.read();
   }
 }

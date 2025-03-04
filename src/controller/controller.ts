@@ -73,15 +73,20 @@ class Controller implements IController {
 
   private async execTask(task: ITask) {
     const { time, interval = 0, params, path } = task;
-    const names = pathToArray(path);
-    const handler = this.findRoute(names);
-    const context = { isAdmin: true } as IContext;
+    const operation = {
+      options: {
+        sessionKey: 'scheduler',
+        origin: 'http://example.com',
+        isAdmin: true,
+      },
+      names: pathToArray(path),
+      data: { params },
+    };
     setTimeout(() => {
-      time !== undefined &&
-        handler(context, params).catch((e) => logger.error(e));
+      time !== undefined && this.exec(operation).catch((e) => logger.error(e));
       if (!interval) return;
       setInterval(
-        () => handler(context, params).catch((e) => logger.error(e)),
+        () => this.exec(operation).catch((e) => logger.error(e)),
         interval,
       ).unref();
     }, time || 0).unref();

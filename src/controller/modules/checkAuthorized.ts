@@ -9,6 +9,7 @@ import { HandlerError } from '../errors';
 const checkAuthorized: TInputModule =
   () =>
   async ({ ...operation }, { session }, handler) => {
+    if (operation.options.isAdmin) return operation;
     const user_status = session.read('user_status') || 'NOT_LOGGEDIN';
     const userStatus = USER_STATUS_MAP[user_status];
     if (userStatus >= loggedInState) return operation;

@@ -9,4 +9,3 @@ export const message: THandler<
   return true;
 };
 message.responseSchema = Joi.boolean();
-message.allowedForUser = 'NOT_LOGGEDIN';

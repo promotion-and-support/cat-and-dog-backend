@@ -30,7 +30,7 @@ export const getOparation = (ctx: Context, origin: string) => {
   }
 
   const operation = {
-    options: { sessionKey: 'messenger', origin: 'https://t.me' },
+    options: { sessionKey: 'messenger', origin: 'https://t.me', isAdmin: true },
     names: 'bot/message'.split('/'),
     data: { params: { chatId, text, message_id, update: !!editedMessage } },
   };
