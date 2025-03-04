@@ -56,7 +56,8 @@ ALTER TABLE public.sessions ALTER COLUMN session_id ADD GENERATED ALWAYS AS IDEN
 CREATE TABLE public.subscriptions (
     user_id bigint NOT NULL,
     type character varying NOT NULL,
-    sent_date timestamp without time zone
+    sent_date timestamp without time zone,
+    subject character varying NOT NULL
 );
 
 
@@ -118,7 +119,7 @@ ALTER TABLE ONLY public.sessions
 --
 
 ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT pk_subscriptions PRIMARY KEY (user_id);
+    ADD CONSTRAINT pk_subscriptions PRIMARY KEY (user_id, subject);
 
 
 --

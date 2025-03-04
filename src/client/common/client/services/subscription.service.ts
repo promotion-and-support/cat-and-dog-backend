@@ -2,13 +2,29 @@ import * as T from '../../server/types/types';
 import { Store } from '../lib/store/store';
 import { IApp } from '../app';
 
-interface SubscriptionState {
-  subscription: T.IGetSubscription;
+interface SubscriptionServiceState {
+  subscriptions: Record<T.SubscriptionSubjectKeys, Record<T.SubscriptionTypeKeys, boolean>>;
 }
 
-export class Subscription extends Store<SubscriptionState> {
+const getState = (): SubscriptionServiceState['subscriptions'] =>
+  ({
+    REPORT: {
+      ON_UPDATE: false,
+      ONE_WEEK: false,
+      TWO_WEEK: false,
+      ONE_MONTH: false,
+    } as const,
+    URGENT: {
+      ON_UPDATE: false,
+      ONE_WEEK: false,
+      TWO_WEEK: false,
+      ONE_MONTH: false,
+    } as const,
+  }) as const;
+
+export class Subscription extends Store<SubscriptionServiceState> {
   constructor(private app: IApp) {
-    super({ subscription: null }, undefined, 'INIT');
+    super({ subscriptions: getState() }, undefined, 'INIT');
   }
 
   async init() {
@@ -16,17 +32,21 @@ export class Subscription extends Store<SubscriptionState> {
   }
 
   async read() {
-    const subscription = (await this.app.api.subscription.get()) as T.IGetSubscription;
-    this.setState({ subscription });
+    const result = await this.app.api.subscription.get();
+    const subscriptions = result.reduce((s, it) => {
+      s[it.subject][it.type] = true;
+      return s;
+    }, getState());
+    this.setState({ subscriptions });
   }
 
   async update(subscription: T.IUpdateSubscription) {
     await this.app.api.subscription.update(subscription);
-    this.setState({ subscription });
+    await this.read();
   }
 
-  async remove() {
-    await this.app.api.subscription.remove();
-    this.setState({ subscription: null });
+  async remove(subscription?: T.IUpdateSubscription) {
+    await this.app.api.subscription.remove(subscription || { subject: null });
+    this.setState({ subscriptions: getState() });
   }
 }

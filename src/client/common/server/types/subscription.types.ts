@@ -6,10 +6,20 @@ export const SUBSCRIBTION_TYPE = {
 };
 export type SubscriptionTypeKeys = keyof typeof SUBSCRIBTION_TYPE;
 
+export const SUBSCRIBTION_SUBJECT = {
+  REPORT: 'report',
+  URGENT: 'urgent',
+};
+export type SubscriptionSubjectKeys = keyof typeof SUBSCRIBTION_SUBJECT;
+
 export type IUpdateSubscription = {
   type: SubscriptionTypeKeys;
+  subject: SubscriptionSubjectKeys;
 };
 
-export type IGetSubscription = {
+export type ISubscription = {
   type: SubscriptionTypeKeys;
-} | null;
+  subject: SubscriptionSubjectKeys;
+};
+
+export type IGetSubscription = ISubscription[];

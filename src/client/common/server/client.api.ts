@@ -58,12 +58,13 @@ export const getApi = (
 
   },
   'subscription': {
-    'get': () => fetch<Q.TSubscriptionGetResponse>('/subscription/get'),
+    'get': () => fetch<P.IGetSubscription>('/subscription/get'),
 
-    'update': (options: Q.TSubscriptionUpdate) =>
+    'update': (options: P.IUpdateSubscription) =>
       fetch<boolean>('/subscription/update', options),
 
-    'remove': () => fetch<boolean>('/subscription/remove'),
+    'remove': (options: Q.TSubscriptionRemove) =>
+      fetch<boolean>('/subscription/remove', options),
 
     'sending': () => fetch<boolean>('/subscription/sending'),
 

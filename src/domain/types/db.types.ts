@@ -34,4 +34,5 @@ export type ITableSubscriptions = {
   user_id: number;
   type: string;
   date: Date | null;
+  subject: string;
 };

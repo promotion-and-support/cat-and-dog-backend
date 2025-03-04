@@ -35,6 +35,10 @@ Table "subscriptions" {
   "user_id" bigint [primary key, not null]
   "type" "character varying" [not null]
   "date" timestamp [default: NULL]
+  "subject" "character varying" [not null]
+  Indexes {
+    (user_id, subject) [pk, name: "pk_subscriptions"]
+  }
 }
 
 Ref "fk_users_tokens_user":"users"."user_id" < "users_tokens"."user_id" [delete: cascade]

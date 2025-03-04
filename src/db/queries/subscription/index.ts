@@ -4,8 +4,8 @@ import { IQueriesSubscriptionSend } from './send';
 
 export interface IQueriesSubscription {
   get: TQuery<[['user_id', number]], ITableSubscriptions>;
-  update: TQuery<[['user_id', number], ['type', string]], ITableSubscriptions>;
-  remove: TQuery<[['user_id', number]]>;
+  update: TQuery<[['user_id', number], ['type', string], ['subject', string]]>;
+  remove: TQuery<[['user_id', number], ['subject', string | null]]>;
   send: IQueriesSubscriptionSend;
 }
 
@@ -17,18 +17,24 @@ export const get = `
 export const update = `
   INSERT INTO subscriptions AS ss (
     user_id,
-    type
+    type,
+    subject
   )
-  VALUES ($1, $2)
-  ON CONFLICT (user_id)
+  VALUES ($1, $2, $3)
+  ON CONFLICT (user_id, subject)
     DO UPDATE
     SET
       type = $2
     WHERE
-      ss.user_id = $1
+      ss.user_id = $1 AND
+      ss.subject = $3
 `;
 
 export const remove = `
   DELETE FROM subscriptions
-  WHERE user_id = $1;
+  WHERE
+    user_id = $1 AND (
+      $2::varchar ISNULL OR
+      subject = $2
+    );
 `;
