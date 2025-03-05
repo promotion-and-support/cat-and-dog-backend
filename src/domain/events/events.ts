@@ -16,13 +16,13 @@ export class Events {
     const tag = text!.split(/\s/)[0];
     const subject = (tag && SUBJECT_BY_TEG[tag]) || 'REPORT';
 
-    const [savedMessage] = await execQuery.subscription.message.get([subject]);
+    const [savedMessage] = await execQuery.message.get([subject]);
     if (savedMessage && savedMessage.message_id > message_id) {
-      return;
+      return false;
     }
-    await execQuery.subscription.message.remove([subject]);
+    await execQuery.message.remove([subject]);
 
-    const [newMessage] = await execQuery.subscription.message.update([
+    const [newMessage] = await execQuery.message.update([
       message_id,
       subject,
       text || '',
@@ -30,6 +30,7 @@ export class Events {
     ]);
 
     this.sendOnUpdate(newMessage!);
+    return true;
   }
 
   async sendOnUpdate(message: ITableMessages) {
@@ -40,7 +41,7 @@ export class Events {
   }
 
   async sendInPeriod() {
-    const [message] = await execQuery.subscription.message.get(['REPORT']);
+    const [message] = await execQuery.message.get(['REPORT']);
     if (message?.content) {
       const users = await execQuery.subscription.send.inPeriod(['REPORT']);
       this.notifService.sendForUsers(users, message);

@@ -2,6 +2,8 @@ import { GetParamsTypes } from '../../types/types';
 import { IQueriesUser } from '../queries/user';
 import { IQueriesSession } from '../queries/session';
 import { IQueriesSubscription } from '../queries/subscription';
+import { IQueriesMessage } from '../queries/message';
+import { IQueriesRole } from '../queries/role';
 
 export interface IDatabaseConfig {
   path: string;
@@ -50,6 +52,8 @@ export interface IDatabaseQueries {
   user: IQueriesUser;
   session: IQueriesSession;
   subscription: IQueriesSubscription;
+  message: IQueriesMessage;
+  role: IQueriesRole;
 }
 
 export interface IQueries {

@@ -98,7 +98,7 @@ CREATE TABLE public.subscriptions (
     type character varying NOT NULL,
     sent_date timestamp without time zone DEFAULT now() NOT NULL,
     subject character varying NOT NULL,
-    message_date timestamp without time zone NOT NULL
+    message_date timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -157,6 +157,70 @@ ALTER TABLE public.users ALTER COLUMN user_id ADD GENERATED ALWAYS AS IDENTITY (
     NO MAXVALUE
     CACHE 1
 );
+
+
+--
+-- Data for Name: messages; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.messages (subject, content, message_id, date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.roles (role_id, name) FROM stdin;
+1	OWNER
+\.
+
+
+--
+-- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.sessions (session_id, user_id, session_key, session_value, updated) FROM stdin;
+\.
+
+
+--
+-- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.subscriptions (user_id, type, sent_date, subject, message_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.users (user_id, email, name, mobile, password, confirmed, chat_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_roles; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.users_roles (user_id, role_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users_tokens; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.users_tokens (user_id, token) FROM stdin;
+\.
+
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
+--
+
+SELECT pg_catalog.setval('public.roles_role_id_seq', 1, true);
 
 
 --

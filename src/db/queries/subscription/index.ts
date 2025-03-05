@@ -1,6 +1,5 @@
 import { ITableSubscriptions } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
-import { IQueriesSubscriptionMessage } from './message';
 import { IQueriesSubscriptionSend } from './send';
 
 export interface IQueriesSubscription {
@@ -8,7 +7,6 @@ export interface IQueriesSubscription {
   update: TQuery<[['user_id', number], ['type', string], ['subject', string]]>;
   remove: TQuery<[['user_id', number], ['subject', string | null]]>;
   send: IQueriesSubscriptionSend;
-  message: IQueriesSubscriptionMessage;
 }
 
 export const get = `

@@ -1,7 +1,7 @@
 import { ITableMessages } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 
-export interface IQueriesSubscriptionMessage {
+export interface IQueriesMessage {
   get: TQuery<[['subject', string]], ITableMessages>;
   update: TQuery<
     [

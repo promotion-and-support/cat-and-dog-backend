@@ -21,6 +21,20 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: messages; Type: TABLE; Schema: public; Owner: cat_and_dog
+--
+
+CREATE TABLE public.messages (
+    subject character varying NOT NULL,
+    content character varying NOT NULL,
+    message_id integer NOT NULL,
+    date timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.messages OWNER TO cat_and_dog;
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: cat_and_dog
 --
 
@@ -31,6 +45,20 @@ CREATE TABLE public.roles (
 
 
 ALTER TABLE public.roles OWNER TO cat_and_dog;
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE; Schema: public; Owner: cat_and_dog
+--
+
+ALTER TABLE public.roles ALTER COLUMN role_id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.roles_role_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- Name: sessions; Type: TABLE; Schema: public; Owner: cat_and_dog
@@ -62,27 +90,15 @@ ALTER TABLE public.sessions ALTER COLUMN session_id ADD GENERATED ALWAYS AS IDEN
 
 
 --
--- Name: subjects; Type: TABLE; Schema: public; Owner: cat_and_dog
---
-
-CREATE TABLE public.subjects (
-    subject_id character varying NOT NULL,
-    message character varying NOT NULL,
-    message_id integer NOT NULL
-);
-
-
-ALTER TABLE public.subjects OWNER TO cat_and_dog;
-
---
 -- Name: subscriptions; Type: TABLE; Schema: public; Owner: cat_and_dog
 --
 
 CREATE TABLE public.subscriptions (
     user_id integer NOT NULL,
     type character varying NOT NULL,
-    sent_date timestamp without time zone,
-    subject_id character varying NOT NULL
+    sent_date timestamp without time zone DEFAULT now() NOT NULL,
+    subject character varying NOT NULL,
+    message_date timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
@@ -144,10 +160,19 @@ ALTER TABLE public.users ALTER COLUMN user_id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Data for Name: messages; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
+--
+
+COPY public.messages (subject, content, message_id, date) FROM stdin;
+\.
+
+
+--
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
 --
 
 COPY public.roles (role_id, name) FROM stdin;
+1	OWNER
 \.
 
 
@@ -160,20 +185,10 @@ COPY public.sessions (session_id, user_id, session_key, session_value, updated) 
 
 
 --
--- Data for Name: subjects; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
---
-
-COPY public.subjects (subject_id, message, message_id) FROM stdin;
-REPORT		0
-URGENT		0
-\.
-
-
---
 -- Data for Name: subscriptions; Type: TABLE DATA; Schema: public; Owner: cat_and_dog
 --
 
-COPY public.subscriptions (user_id, type, sent_date, subject_id) FROM stdin;
+COPY public.subscriptions (user_id, type, sent_date, subject, message_date) FROM stdin;
 \.
 
 
@@ -202,17 +217,18 @@ COPY public.users_tokens (user_id, token) FROM stdin;
 
 
 --
--- Name: sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
+-- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
 --
 
-SELECT pg_catalog.setval('public.sessions_session_id_seq', 1, false);
+SELECT pg_catalog.setval('public.roles_role_id_seq', 1, true);
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
+-- Name: messages pk_messages; Type: CONSTRAINT; Schema: public; Owner: cat_and_dog
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
+ALTER TABLE ONLY public.messages
+    ADD CONSTRAINT pk_messages PRIMARY KEY (message_id);
 
 
 --
@@ -232,19 +248,11 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: subjects pk_subjects; Type: CONSTRAINT; Schema: public; Owner: cat_and_dog
---
-
-ALTER TABLE ONLY public.subjects
-    ADD CONSTRAINT pk_subjects PRIMARY KEY (subject_id);
-
-
---
 -- Name: subscriptions pk_subscriptions; Type: CONSTRAINT; Schema: public; Owner: cat_and_dog
 --
 
 ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT pk_subscriptions PRIMARY KEY (user_id, subject_id);
+    ADD CONSTRAINT pk_subscriptions PRIMARY KEY (user_id, subject);
 
 
 --
@@ -330,14 +338,6 @@ ALTER TABLE ONLY public.sessions
 
 ALTER TABLE ONLY public.subscriptions
     ADD CONSTRAINT fk_subscribtions_users FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
-
-
---
--- Name: subscriptions fk_subscriptions_subject; Type: FK CONSTRAINT; Schema: public; Owner: cat_and_dog
---
-
-ALTER TABLE ONLY public.subscriptions
-    ADD CONSTRAINT fk_subscriptions_subject FOREIGN KEY (subject_id) REFERENCES public.subjects(subject_id) ON DELETE CASCADE NOT VALID;
 
 
 --
