@@ -1,17 +1,11 @@
 import { Readable } from 'node:stream';
 import { IConnectionService } from '../../server/types';
-import { ITableUsers } from '../../domain/types/db.types';
-// eslint-disable-next-line max-len
-import { SubscriptionSubjectKeys } from '../../client/common/server/types/subscription.types';
+import { ITableMessages, ITableUsers } from '../../domain/types/db.types';
 
 export class NotificationService {
   private tg: IConnectionService;
   private tgStream: Readable &
-    AsyncIterable<{ user: ITableUsers; subject: SubscriptionSubjectKeys }>;
-  private messages = {
-    REPORT: { id: 0, message: '' },
-    URGENT: { id: 0, message: '' },
-  };
+    AsyncIterable<{ user: ITableUsers; message: ITableMessages }>;
 
   constructor() {
     this.tg = messengerService;
@@ -20,17 +14,20 @@ export class NotificationService {
   }
 
   private async sendingToTelegram() {
-    for await (const { user, subject } of this.tgStream) {
-      const { message } = this.messages[subject];
-      if (!message) {
+    for await (const { user, message } of this.tgStream) {
+      const { user_id, chat_id } = user;
+      const { subject, content, date: message_date } = message;
+
+      if (!content) {
         continue;
       }
-      const { user_id, chat_id } = user;
-      // logger.warn('SEND TO TELEGRAM', user);
-      const success = await this.tg!.sendNotification(chat_id!, message);
+
+      // logger.warn('SEND TO TELEGRAM', user, content);
+      const success = await this.tg!.sendNotification(chat_id!, content);
+
       if (success) {
         await execQuery.subscription.send
-          .register([subject, user_id])
+          .register([subject, user_id, message_date])
           .catch(logger.error.bind(logger));
       } else {
         logger.warn("CANT'T SEND TO TELEGRAM", user_id);
@@ -38,26 +35,9 @@ export class NotificationService {
     }
   }
 
-  setMessage(
-    subject: SubscriptionSubjectKeys,
-    message_id: number,
-    message: string,
-  ) {
-    const messageBySubject = this.messages[subject];
-    if (!messageBySubject) {
-      return;
-    }
-    if (message_id < messageBySubject.id) {
-      return false;
-    }
-    messageBySubject.id = message_id;
-    messageBySubject.message = message;
-    return true;
-  }
-
-  async sendForUsers(subject: SubscriptionSubjectKeys, users: ITableUsers[]) {
+  async sendForUsers(users: ITableUsers[], message: ITableMessages) {
     for (const user of users) {
-      this.tgStream.push({ subject, user });
+      this.tgStream.push({ user, message });
     }
   }
 }

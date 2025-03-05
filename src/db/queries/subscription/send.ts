@@ -4,7 +4,9 @@ import { TQuery } from '../../types/types';
 export interface IQueriesSubscriptionSend {
   onUpdate: TQuery<[['subject', string]], ITableUsers>;
   inPeriod: TQuery<[['subject', string]], ITableUsers>;
-  register: TQuery<[['subject', string], ['user_id', number]]>;
+  register: TQuery<
+    [['subject', string], ['user_id', number], ['message_date', Date]]
+  >;
 }
 
 export const onUpdate = `
@@ -38,7 +40,9 @@ export const inPeriod = `
 
 export const register = `
   UPDATE subscriptions
-  SET sent_date = now()
+  SET
+    sent_date = now(),
+    message_date = $3
   WHERE
     subject = $1 AND
     user_id = $2;

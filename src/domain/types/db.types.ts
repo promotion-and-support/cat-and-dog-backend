@@ -3,6 +3,9 @@ export const TABLES_MAP = {
   USERS_TOKENS: 'users_tokens',
   SESSIONS: 'sessions',
   SUBSCRIPTIONS: 'subscriptions',
+  MESSAGES: 'messages',
+  ROLES: 'roles',
+  USERS_ROLES: 'users_roles',
 };
 
 export type OuterJoin<T> = { [key in keyof T]: T[key] | null };
@@ -27,12 +30,30 @@ export type ITableSessions = {
   user_id: number;
   session_key: string;
   session_value: string;
-  updated: string;
+  updated: Date;
+};
+
+export type ITableRoles = {
+  role_id: number;
+  name: string;
+};
+
+export type ITableUsersRoles = {
+  user_id: number;
+  role_id: number;
+};
+
+export type ITableMessages = {
+  message_id: number;
+  subject: string;
+  content: string;
+  date: Date;
 };
 
 export type ITableSubscriptions = {
   user_id: number;
   type: string;
-  date: Date | null;
+  date: Date;
   subject: string;
+  message_date: Date;
 };

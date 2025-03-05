@@ -1,5 +1,7 @@
+import { Message } from 'grammy/types';
 // eslint-disable-next-line max-len
 import { SubscriptionSubjectKeys } from '../../client/common/server/types/subscription.types';
+import { ITableMessages } from '../types/db.types';
 
 const SUBJECT_BY_TEG: Record<string, SubscriptionSubjectKeys> = {
   '#sos': 'URGENT',
@@ -8,31 +10,40 @@ const SUBJECT_BY_TEG: Record<string, SubscriptionSubjectKeys> = {
 export class Events {
   private notifService = notificationService;
 
-  setMessage(message_id: number, text: string) {
-    const tag = text.split(/\s/)[0];
-    const subject = (tag && SUBJECT_BY_TEG[tag]) || 'REPORT';
-    const result = this.notifService.setMessage(subject, message_id, text);
+  async setMessage(message: Message) {
+    const { message_id, text, edit_date, date } = message;
 
-    if (!result) {
+    const tag = text!.split(/\s/)[0];
+    const subject = (tag && SUBJECT_BY_TEG[tag]) || 'REPORT';
+
+    const [savedMessage] = await execQuery.subscription.message.get([subject]);
+    if (savedMessage && savedMessage.message_id > message_id) {
       return;
     }
+    await execQuery.subscription.message.remove([subject]);
 
-    this.sendOnUpdate(subject);
+    const [newMessage] = await execQuery.subscription.message.update([
+      message_id,
+      subject,
+      text || '',
+      new Date((edit_date || date) * 1000),
+    ]);
+
+    this.sendOnUpdate(newMessage!);
   }
 
-  async sendOnUpdate(subject: SubscriptionSubjectKeys) {
-    const usersOnUpdate = await execQuery.subscription.send.onUpdate([subject]);
-    this.notifService.sendForUsers(subject, usersOnUpdate);
+  async sendOnUpdate(message: ITableMessages) {
+    const usersOnUpdate = await execQuery.subscription.send.onUpdate([
+      message.subject,
+    ]);
+    this.notifService.sendForUsers(usersOnUpdate, message);
   }
 
   async sendInPeriod() {
-    const usersInPeriod1 = await execQuery.subscription.send.inPeriod([
-      'REPORT',
-    ]);
-    const usersInPeriod2 = await execQuery.subscription.send.inPeriod([
-      'URGENT',
-    ]);
-    this.notifService.sendForUsers('REPORT', usersInPeriod1);
-    this.notifService.sendForUsers('URGENT', usersInPeriod2);
+    const [message] = await execQuery.subscription.message.get(['REPORT']);
+    if (message?.content) {
+      const users = await execQuery.subscription.send.inPeriod(['REPORT']);
+      this.notifService.sendForUsers(users, message);
+    }
   }
 }

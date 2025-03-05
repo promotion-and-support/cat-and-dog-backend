@@ -11,7 +11,7 @@ export const getOparation = (ctx: Context, origin: string) => {
   const { chat, message, editedMessage } = ctx;
   const chatId = chat?.id.toString();
   if (!chatId) return;
-  const { text, message_id = 0 } = message || editedMessage || {};
+  const { text } = message || editedMessage || {};
   if (!text) return;
   if (/^\/start$/.test(text)) {
     return;
@@ -32,7 +32,15 @@ export const getOparation = (ctx: Context, origin: string) => {
   const operation = {
     options: { sessionKey: 'messenger', origin: 'https://t.me', isAdmin: true },
     names: 'bot/message'.split('/'),
-    data: { params: { chatId, text, message_id, update: !!editedMessage } },
+    data: {
+      params: {
+        chatId,
+        message: (message || editedMessage) as unknown as Record<
+          string,
+          string
+        >,
+      },
+    },
   };
 
   return { operation };
