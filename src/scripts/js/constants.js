@@ -24,8 +24,9 @@ exports.FROM_BACK_TO_FRONT = [
 ].map((i) => (0, node_path_1.join)(exports.BACK_PATH, i));
 exports.FROM_FRONT_TO_BACK = [
   'common/client',
-  'common/client/lib',
   'common/client/connection',
+  'common/client/lib',
+  'common/client/services',
 ].map((i) => (0, node_path_1.join)(exports.FRONT_PATH, i));
 exports.EXCLUDE_FROM_BACK = ['local'].map((i) =>
   (0, node_path_1.join)(exports.BACK_PATH, i),

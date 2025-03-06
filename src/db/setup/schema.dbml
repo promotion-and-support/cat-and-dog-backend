@@ -1,5 +1,5 @@
 Table "users" {
-  "user_id" bigint [primary key, not null]
+  "user_id" integer [primary key, not null]
   "email" "character varying(50)" [default: NULL]
   "name" "character varying(50)" [default: NULL]
   "mobile" "character varying(50)" [default: NULL]
@@ -13,7 +13,7 @@ Table "users" {
 }
 
 Table "users_tokens" {
-  "user_id" bigint [primary key, not null]
+  "user_id" integer [primary key, not null]
   "token" "character varying(255)" [not null]
   Indexes {
     token [type: btree, unique, name: "uk_users_tokens_token_idx"]
@@ -21,15 +21,46 @@ Table "users_tokens" {
 }
 
 Table "sessions" {
-  "session_id" bigint [primary key, not null]
-  "user_id" bigint [not null]
+  "session_id" integer [primary key, not null]
+  "user_id" integer [not null]
   "session_key" "character varying(255)" [not null]
   "session_value" "character varying(255)" [not null]
   "updated" timestamp [not null, default: 'now()']
-  // Indexes {
-  //   session_key
-  // }
+}
+
+Table roles {
+  "role_id" integer [primary key, not null]
+  "name" "character varying" [not null]
+}
+
+Table users_roles {
+  "user_id" integer [not null]
+  "role_id" integer [not null]
+  Indexes {
+    (user_id, role_id) [pk, name: "pk_users_roles"]
+  }
+}
+
+Table messages {
+  "message_id" integer [primary key, not null]
+  "subject" "character varying" [not null]
+  "content" "character varying" [not null]
+  "date" timestamp [not null]
+}
+
+Table "subscriptions" {
+  "user_id" integer [primary key, not null]
+  "type" "character varying" [not null]
+  "date" timestamp [not null, default: 'now()']
+  "subject" "character varying" [not null]
+  "message_date" timestamp [not null, default: 'now()']
+  Indexes {
+    (user_id, subject) [pk, name: "pk_subscriptions"]
+  }
 }
 
 Ref "fk_users_tokens_user":"users"."user_id" < "users_tokens"."user_id" [delete: cascade]
 Ref "fk_sessions_user":"users"."user_id" < "sessions"."user_id" [delete: cascade]
+Ref "fk_users_roles_user":"users"."user_id" < "users_roles"."user_id" [delete: cascade]
+Ref "fk_users_roles_role":"roles"."role_id" < "users_roles"."role_id" [delete: cascade]
+Ref "fk_subscriptions_user":"users"."user_id" < "subscriptions"."user_id" [delete: cascade]

@@ -69,7 +69,7 @@ export default class App {
   async stop() {
     await this.apiServer?.stop();
     await this.server?.stop();
-    // await this.messenger?.stop();
+    await this.messenger?.stop();
     await this.db?.disconnect();
   }
 

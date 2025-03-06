@@ -14,6 +14,7 @@ class TgConnection implements IInputConnection {
   constructor(private config: ITgConfig) {
     this.server = new Bot(config.token);
     this.server.on('message', this.handleRequest.bind(this));
+    this.server.on('edit', this.handleRequest.bind(this));
     this.server.catch(this.handleError.bind(this));
     this.origin = this.config.origin || 'https://example.com';
   }
@@ -64,22 +65,34 @@ class TgConnection implements IInputConnection {
     if (operation) {
       try {
         const result = await this.exec!(operation);
-        if (result) return ctx.reply('success');
+        if (result)
+          return; // return ctx.reply('success');
         else return ctx.reply('bad command');
       } catch (e) {
         return ctx.reply('error');
       }
     }
 
-    const testBtn = [{ text: 'Open TestApp', web_app: { url: this.origin } }];
+    // const testBtn =
+    //   [{ text: 'Open TestApp', web_app: { url: this.origin } }];
     const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
-    if (this.config.dev) btns.push(testBtn);
+    // if (this.config.dev) btns.push(testBtn);
     const inlineKyeboard = new InlineKeyboard(btns);
     return ctx.reply('MENU', { reply_markup: inlineKyeboard });
   }
 
-  private async sendNotification(chatId: string) {
-    const appName = 'You & World';
+  private async sendNotification(chatId: string, text?: string) {
+    if (text) {
+      try {
+        await this.server.api.sendMessage(chatId, text);
+        return true;
+      } catch (e) {
+        logger.warn(e);
+        return false;
+      }
+    }
+
+    const appName = 'Cat & Dog';
     const message = `На сайті ${appName} нові події`;
     const inlineKyeboard = new InlineKeyboard().url(appName, this.origin);
     try {

@@ -53,6 +53,22 @@ export const getApi = (
       },
     },
   },
+  'bot': {
+    'message': () => fetch<boolean>('/bot/message'),
+
+  },
+  'subscription': {
+    'get': () => fetch<P.IGetSubscription>('/subscription/get'),
+
+    'update': (options: P.IUpdateSubscription) =>
+      fetch<boolean>('/subscription/update', options),
+
+    'remove': (options: Q.TSubscriptionRemove) =>
+      fetch<boolean>('/subscription/remove', options),
+
+    'sending': () => fetch<boolean>('/subscription/sending'),
+
+  },
   'user': {
     'read': () => fetch<P.IUserResponse>('/user/read'),
 

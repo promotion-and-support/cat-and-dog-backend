@@ -9,6 +9,7 @@ export interface IOperation {
     requestId?: number;
     pathname?: string;
     connectionId?: number;
+    isAdmin?: boolean;
   };
   names: string[];
   data: {

@@ -12,8 +12,9 @@ export const FROM_BACK_TO_FRONT = [
 
 export const FROM_FRONT_TO_BACK = [
   'common/client',
-  'common/client/lib',
   'common/client/connection',
+  'common/client/lib',
+  'common/client/services',
 ].map((i) => join(FRONT_PATH, i));
 
 export const EXCLUDE_FROM_BACK = ['local'].map((i) => join(BACK_PATH, i));
