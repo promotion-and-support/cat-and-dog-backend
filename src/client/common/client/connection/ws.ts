@@ -96,7 +96,6 @@ class WsConnection extends EventEmitter {
   handleMessage({ data: message }: MessageEvent) {
     if (message === 'ping') return this.setNextPingTimeout();
     const response = JSON.parse(message as string) as IWsResponse;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { requestId: reqId, data } = response;
     if (!reqId) return this.emit('message', data);
     logData(response, 'RES');
@@ -132,9 +131,7 @@ class WsConnection extends EventEmitter {
       const handleResponse = (response: IWsResponse) => {
         if (!timeout) return;
         clearTimeout(timeout);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { data, status } = response;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         if (status === 200) return rv(data);
         rj(new HttpResponseError(status));
       };
@@ -149,14 +146,9 @@ export const getConnection = (
   baseUrl: string,
   onConnection: () => void,
   onMessage: (data: any) => void,
-  onError?: (e: unknown) => void,
 ): TFetch => {
   const connection = new WsConnection(baseUrl);
   connection.on('connection', onConnection);
   connection.on('message', onMessage);
-  return (...args) =>
-    connection.sendRequest(...args).catch((e) => {
-      onError?.(e);
-      throw e;
-    });
+  return connection.sendRequest;
 };

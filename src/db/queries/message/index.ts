@@ -13,6 +13,7 @@ export interface IQueriesMessage {
     ITableMessages
   >;
   remove: TQuery<[['subject', string]]>;
+  removeOld: TQuery<[]>;
 }
 
 export const get = `
@@ -45,4 +46,9 @@ export const remove = `
   FROM messages
   WHERE
     subject = $1;
+`;
+
+export const removeOld = `
+  DELETE FROM messages
+  WHERE date + interval '40 second'< now();
 `;

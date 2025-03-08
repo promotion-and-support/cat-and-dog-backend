@@ -46,6 +46,18 @@ class TgConnection implements IInputConnection {
       logger.error(e);
       throw new ServerError('LISTEN_ERROR');
     }
+
+    // logger.info('SET MENU BUTTON');
+    // await this.server.api
+    //   .setChatMenuButton({
+    //     // menu_button: { type: 'default' },
+    //     menu_button: {
+    //       type: 'web_app',
+    //       text: 'OPEN',
+    //       web_app: { url: this.origin },
+    //     },
+    //   })
+    //   .catch(logger.error);
   }
 
   async stop() {
@@ -84,7 +96,7 @@ class TgConnection implements IInputConnection {
   private async sendNotification(chatId: string, text?: string) {
     if (text) {
       try {
-        await this.server.api.sendMessage(chatId, text);
+        await this.server.api.sendMessage(chatId, text, { parse_mode: 'HTML' });
         return true;
       } catch (e) {
         logger.warn(e);
