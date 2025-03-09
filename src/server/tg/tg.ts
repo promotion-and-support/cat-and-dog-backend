@@ -7,10 +7,6 @@ import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
 
-console.log('NODE_ENV', process.env.NODE_ENV, env.NODE_ENV);
-console.log('OROGON', process.env.ORIGIN, env.ORIGIN);
-console.log('MAIL', process.env.MAIL, env.MAIL);
-
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;
   private server: ITgServer;
@@ -21,7 +17,7 @@ class TgConnection implements IInputConnection {
     this.server.on('message', this.handleRequest.bind(this));
     this.server.on('edit', this.handleRequest.bind(this));
     this.server.catch(this.handleError.bind(this));
-    this.origin = this.config.origin || 'https://example.com';
+    this.origin = env.ORIGIN || 'https://example.com';
   }
 
   onOperation(cb: THandleOperation) {
@@ -81,21 +77,19 @@ class TgConnection implements IInputConnection {
 
     if (operation) {
       try {
-        const result = await this.exec!(operation);
-        if (result)
-          return; // return ctx.reply('success');
-        else return ctx.reply('bad command');
+        // const result = await this.exec!(operation);
+        // if (result) return ctx.reply('success');
+        // else return ctx.reply('bad command');
       } catch (e) {
         return ctx.reply('error');
       }
     }
 
-    // const testBtn =
-    //   [{ text: 'Open TestApp', web_app: { url: this.origin } }];
-    const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
-    // if (this.config.dev) btns.push(testBtn);
-    const inlineKyeboard = new InlineKeyboard(btns);
-    return ctx.reply('MENU', { reply_markup: inlineKyeboard });
+    if (env.DEV) {
+      const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
+      const inlineKyeboard = new InlineKeyboard(btns);
+      return ctx.reply('OPEN', { reply_markup: inlineKyeboard });
+    }
   }
 
   private async sendNotification(chatId: string, text?: string) {
