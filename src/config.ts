@@ -18,6 +18,7 @@ const {
   MAIL_PORT: mailPort,
   MAIL_USER: mailUser,
   MAIL_PASSWORD: mailPass,
+  TG_BOT_TOKEN: tgBotToken,
   ...restEnv
 } = getEnv();
 const connection = {
@@ -112,10 +113,7 @@ const config: IConfig = {
     },
     tg: {
       path: resolvePath('server/tg/tg'),
-      token: restEnv.TG_BOT_TOKEN,
-      user_name: restEnv.TG_BOT,
-      origin: restEnv.ORIGIN,
-      dev: restEnv.DEV,
+      token: tgBotToken,
     },
   },
 };
