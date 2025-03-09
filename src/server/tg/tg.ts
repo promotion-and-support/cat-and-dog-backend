@@ -1,10 +1,15 @@
 /* eslint-disable max-lines */
+import { env } from 'node:process';
 import { Bot, BotError, Context, InlineKeyboard } from 'grammy';
 import { THandleOperation } from '../../types/operation.types';
 import { IInputConnection } from '../types';
 import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
+
+console.log('NODE_ENV', process.env.NODE_ENV, env.NODE_ENV);
+console.log('OROGON', process.env.ORIGIN, env.ORIGIN);
+console.log('MAIL', process.env.MAIL, env.MAIL);
 
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;

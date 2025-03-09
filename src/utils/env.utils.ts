@@ -62,5 +62,7 @@ export const getEnv = () => {
     NOTIFICATION_INTERVAL,
   };
 
+  Object.assign(env, cleanedEnvObj);
+
   return cleanedEnvObj;
 };
