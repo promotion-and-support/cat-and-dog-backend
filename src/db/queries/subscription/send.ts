@@ -11,7 +11,7 @@ export interface IQueriesSubscriptionSend {
   >;
 }
 
-export const inPeriod = `
+export const toUsers = `
   SELECT * FROM users u
   JOIN subscriptions ss ON
     ss.user_id  = u.user_id
