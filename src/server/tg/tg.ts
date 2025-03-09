@@ -10,14 +10,13 @@ import { getOparation } from './getOperation';
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;
   private server: ITgServer;
-  private origin: string;
+  private origin = env.ORIGIN || 'https://example.com';
 
   constructor(private config: ITgConfig) {
-    this.server = new Bot(config.token);
+    this.server = new Bot(this.config.token);
     this.server.on('message', this.handleRequest.bind(this));
     this.server.on('edit', this.handleRequest.bind(this));
     this.server.catch(this.handleError.bind(this));
-    this.origin = env.ORIGIN || 'https://example.com';
   }
 
   onOperation(cb: THandleOperation) {
