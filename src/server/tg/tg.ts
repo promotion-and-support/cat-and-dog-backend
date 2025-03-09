@@ -7,7 +7,7 @@ import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
 
-console.log('DEV', env.DEV);
+console.log('DEV', env.DEV, typeof env.DEV);
 console.log('ORIGIN', env.ORIGIN);
 console.log('NODE_ENV', env.NODE_ENV);
 
@@ -90,7 +90,7 @@ class TgConnection implements IInputConnection {
       return;
     }
 
-    if (env.DEV) {
+    if (env.DEV === 'true') {
       const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
       const inlineKyeboard = new InlineKeyboard(btns);
       return ctx.reply('OPEN', { reply_markup: inlineKyeboard });
