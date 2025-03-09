@@ -5,7 +5,8 @@ const handler: THandler<never, boolean> = async ({ isAdmin }) => {
   if (!isAdmin) {
     return false;
   }
-  new domain.events.Events().sendInPeriod();
+  new domain.events.Events().sendMessage('URGENT');
+  new domain.events.Events().sendMessage('REPORT');
   return true;
 };
 handler.responseSchema = Joi.boolean();

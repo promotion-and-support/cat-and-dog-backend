@@ -35,7 +35,7 @@ export const getEnv = () => {
     MAIL_USER = '',
     MAIL_PASSWORD = '',
     INVITE_CONFIRM = false,
-    NOTIFICATION_INTERVAL = 0,
+    NOTIFICATION_INTERVAL = 10, // second
   } = env as Record<CleanedEnvKeys, any>;
 
   const cleanedEnvObj: ICleanedEnv = {

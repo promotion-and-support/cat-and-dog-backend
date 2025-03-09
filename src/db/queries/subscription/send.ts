@@ -1,23 +1,15 @@
+/* eslint-disable max-len */
 import { ITableUsers } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 
+const INTERVAL = +(process.env.NOTIFICATION_INTERVAL || 0);
+
 export interface IQueriesSubscriptionSend {
-  onUpdate: TQuery<[['subject', string]], ITableUsers>;
-  inPeriod: TQuery<[['subject', string]], ITableUsers>;
+  toUsers: TQuery<[['subject', string], ['message_date', Date]], ITableUsers>;
   register: TQuery<
     [['subject', string], ['user_id', number], ['message_date', Date]]
   >;
 }
-
-export const onUpdate = `
-  SELECT *
-  FROM users u
-  JOIN subscriptions as ss ON
-    ss.user_id = u.user_id
-  WHERE
-    ss.subject = $1 AND
-    ss.type = 'ON_UPDATE';
-`;
 
 export const inPeriod = `
   SELECT * FROM users u
@@ -25,17 +17,17 @@ export const inPeriod = `
     ss.user_id  = u.user_id
   WHERE
     ss.subject = $1 AND
-    ss.type <> 'ON_UPDATE' AND (
-    ss.sent_date ISNULL OR
-    now() > ss.sent_date +
-      CASE
-        WHEN ss.type = 'ONE_WEEK' THEN interval '10 seconds'
+     
+    CASE
+      WHEN ss.type = 'ONE_WEEK' THEN now() > ss.sent_date + interval '${INTERVAL} seconds'
+      ELSE CASE
+        WHEN ss.type = 'TWO_WEEK' THEN now() > ss.sent_date + interval '${INTERVAL * 2} seconds'
         ELSE CASE
-          WHEN ss.type = 'TWO_WEEK' THEN interval '20 seconds'
-          ELSE interval '40 seconds'
+          WHEN ss.type = 'ONE_MONTH' THEN now() > ss.sent_date + interval '${INTERVAL * 4} seconds'
+          ELSE ss.message_date < $2
         END
       END
-    );
+    END;
 `;
 
 export const register = `

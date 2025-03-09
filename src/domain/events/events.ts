@@ -4,41 +4,33 @@ import { SubscriptionSubjectKeys } from '../../client/common/server/types/subscr
 import { ITableMessages, ITableUsers } from '../types/db.types';
 
 const SUBJECT_BY_TEG: Record<string, SubscriptionSubjectKeys> = {
-  '#новини': 'URGENT',
-  '#звіт': 'REPORT',
   '#news': 'URGENT',
+  '#новини': 'URGENT',
   '#report': 'REPORT',
+  '#звіт': 'REPORT',
 };
 
 export class Events {
   private notifService = notificationService;
 
   async setMessage(message: Message) {
-    const { message_id, text: t, edit_date, date, chat } = message;
+    const { message_id, text: t = '', edit_date, date, chat } = message;
+
     let text = t;
-    const [tag] = text!.split(/\s/);
-    const subject = tag && SUBJECT_BY_TEG[tag.toLocaleLowerCase()];
-    if (!subject) {
-      if (!chat.id) {
-        return false;
-      }
-      text = text!.replace(RegExp(`^#test\\s`, 'i'), `#test\n`);
-      text = text!.replace(RegExp(`^#тест\\s`, 'i'), `#тест\n`);
-      this.echo(
-        { chat_id: chat.id.toString() } as ITableUsers,
-        { content: text } as ITableMessages,
-      );
-      return true;
+    if (!text) {
+      return false;
     }
 
-    text = text!.replace(RegExp(`^${tag}\\s`), `${tag}\n`);
+    const [tag] = text!.split(/\s/);
+    const subject = tag && SUBJECT_BY_TEG[tag.toLocaleLowerCase()];
 
-    // if (subject === 'REPORT') {
-    //   text = `<b><i>ЗВІТ</i></b>\n${text}`;
-    // } else {
-    //   text = text!.replace(/#news\s/, `<b><i>НОВИНИ</i></b>\n`);
-
-    // }
+    if (!subject) {
+      if (chat.id) {
+        this.echo(chat.id, text);
+        return true;
+      }
+      return false;
+    }
 
     const [savedMessage] = await execQuery.message.get([subject]);
     if (savedMessage && savedMessage.message_id > message_id) {
@@ -46,34 +38,38 @@ export class Events {
     }
     await execQuery.message.remove([subject]);
 
-    const [newMessage] = await execQuery.message.update([
+    text = text.replace(RegExp(`^${tag}\\s`), `${tag}\n`);
+    await execQuery.message.update([
       message_id,
       subject,
-      text || '',
+      text,
       new Date((edit_date || date) * 1000),
     ]);
 
-    this.sendOnUpdate(newMessage!);
+    this.sendMessage(subject);
+
     return true;
   }
 
-  echo(user: ITableUsers, message: ITableMessages) {
+  echo(chatId: number, text: string) {
+    let content = text!.replace(RegExp(`^#test\\s`, 'i'), `#test\n`);
+    content = text!.replace(RegExp(`^#тест\\s`, 'i'), `#тест\n`);
+    const user = { chat_id: chatId.toString() } as ITableUsers;
+    const message = { content } as ITableMessages;
     this.notifService.sendForUsers([user], message);
   }
 
-  async sendOnUpdate(message: ITableMessages) {
-    const usersOnUpdate = await execQuery.subscription.send.onUpdate([
-      message.subject,
-    ]);
-    this.notifService.sendForUsers(usersOnUpdate, message);
-  }
-
-  async sendInPeriod() {
+  async sendMessage(subject: SubscriptionSubjectKeys) {
     await execQuery.message.removeOld([]);
-    const [message] = await execQuery.message.get(['REPORT']);
-    if (message?.content) {
-      const users = await execQuery.subscription.send.inPeriod(['REPORT']);
-      this.notifService.sendForUsers(users, message);
+    const [message] = await execQuery.message.get([subject]);
+    if (!message?.content) {
+      return;
     }
+
+    const users = await execQuery.subscription.send.toUsers([
+      subject,
+      message.date,
+    ]);
+    this.notifService.sendForUsers(users, message);
   }
 }

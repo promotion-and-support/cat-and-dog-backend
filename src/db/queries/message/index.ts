@@ -1,6 +1,8 @@
 import { ITableMessages } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 
+const INTERVAL = +(process.env.NOTIFICATION_INTERVAL || 0);
+
 export interface IQueriesMessage {
   get: TQuery<[['subject', string]], ITableMessages>;
   update: TQuery<
@@ -50,5 +52,5 @@ export const remove = `
 
 export const removeOld = `
   DELETE FROM messages
-  WHERE date + interval '40 second'< now();
+  WHERE date + interval '${INTERVAL * 4} second'< now();
 `;

@@ -86,7 +86,8 @@ const config: IConfig = {
       {
         path: 'subscription/sending',
         params: {},
-        interval: 5_000,
+        interval: (restEnv.NOTIFICATION_INTERVAL / 2) * 1000,
+        time: 0,
       },
     ],
   },
