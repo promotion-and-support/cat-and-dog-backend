@@ -7,10 +7,6 @@ import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
 
-console.log('DEV', env.DEV, typeof env.DEV);
-console.log('ORIGIN', env.ORIGIN);
-console.log('NODE_ENV', env.NODE_ENV);
-
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;
   private server: ITgServer;

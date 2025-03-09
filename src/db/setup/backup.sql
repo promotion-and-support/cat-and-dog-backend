@@ -172,7 +172,8 @@ COPY public.messages (subject, content, message_id, date) FROM stdin;
 --
 
 COPY public.roles (role_id, name) FROM stdin;
-1	OWNER
+1	ADMIN
+2	OWNER
 \.
 
 
@@ -220,7 +221,7 @@ COPY public.users_tokens (user_id, token) FROM stdin;
 -- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
 --
 
-SELECT pg_catalog.setval('public.roles_role_id_seq', 1, true);
+SELECT pg_catalog.setval('public.roles_role_id_seq', 2, true);
 
 
 --
