@@ -2,13 +2,20 @@ import Joi from 'joi';
 import { Message } from 'grammy/types';
 import { THandler } from '../../controller/types';
 
+const ALLOWED_FOR = ['OWNER', 'ADMIN'];
+
 export const message: THandler<
   { chatId: string; message: Record<string, string> },
   boolean
-> = async (_, { chatId, message }) => {
-  const [isOwner] = await execQuery.role.getByChatIdAndRole([chatId, 'OWNER']);
+> = async ({ isAdmin }, { chatId, message }) => {
+  if (!isAdmin) {
+    return false;
+  }
 
-  if (!isOwner) {
+  const [role] = await execQuery.role.getByChatId([chatId]);
+  const allowed = ALLOWED_FOR.includes(role?.name || '');
+
+  if (!allowed) {
     return false;
   }
 

@@ -26,6 +26,9 @@ export class NotificationService {
       const success = await this.tg!.sendNotification(chat_id!, content);
 
       if (success) {
+        if (!user_id) {
+          continue;
+        }
         await execQuery.subscription.send
           .register([subject, user_id, message_date])
           .catch(logger.error.bind(logger));

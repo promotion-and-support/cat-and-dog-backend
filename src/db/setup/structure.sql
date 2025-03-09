@@ -28,7 +28,7 @@ CREATE TABLE public.messages (
     subject character varying NOT NULL,
     content character varying NOT NULL,
     message_id integer NOT NULL,
-    date timestamp without time zone NOT NULL
+    date timestamp with time zone NOT NULL
 );
 
 
@@ -69,7 +69,7 @@ CREATE TABLE public.sessions (
     user_id integer NOT NULL,
     session_key character varying(255) NOT NULL,
     session_value character varying(255) NOT NULL,
-    updated timestamp without time zone DEFAULT now() NOT NULL
+    updated timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -96,9 +96,9 @@ ALTER TABLE public.sessions ALTER COLUMN session_id ADD GENERATED ALWAYS AS IDEN
 CREATE TABLE public.subscriptions (
     user_id integer NOT NULL,
     type character varying NOT NULL,
-    sent_date timestamp without time zone DEFAULT now() NOT NULL,
+    sent_date timestamp with time zone DEFAULT now() NOT NULL,
     subject character varying NOT NULL,
-    message_date timestamp without time zone DEFAULT now() NOT NULL
+    message_date timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -221,6 +221,20 @@ COPY public.users_tokens (user_id, token) FROM stdin;
 --
 
 SELECT pg_catalog.setval('public.roles_role_id_seq', 1, true);
+
+
+--
+-- Name: sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
+--
+
+SELECT pg_catalog.setval('public.sessions_session_id_seq', 1, false);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: cat_and_dog
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --

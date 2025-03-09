@@ -10,7 +10,7 @@ export interface IQueriesRole {
 }
 
 export const getByChatId = `
-  SELECT *
+  SELECT r.*
   FROM users_roles ur
   JOIN roles r ON
     r.role_id = ur.role_id
@@ -21,7 +21,7 @@ export const getByChatId = `
 `;
 
 export const getByChatIdAndRole = `
-  SELECT *
+  SELECT r.*
   FROM users_roles ur
   JOIN roles r ON
     r.role_id = ur.role_id

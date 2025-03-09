@@ -76,12 +76,14 @@ class TgConnection implements IInputConnection {
 
     if (operation) {
       try {
+        await this.exec!(operation);
         // const result = await this.exec!(operation);
         // if (result) return ctx.reply('success');
         // else return ctx.reply('bad command');
       } catch (e) {
-        return ctx.reply('error');
+        ctx.reply('error');
       }
+      return;
     }
 
     if (env.DEV) {

@@ -95,10 +95,10 @@ class Controller implements IController {
   async exec(operation: IOperation): Promise<TOperationResponse> {
     if (!this.inited) throw new ControllerError('CONTROLLER_ERROR');
     const {
-      options: { origin, connectionId },
+      options: { origin, connectionId, isAdmin },
       names,
     } = operation;
-    const context = { origin, connectionId } as IContext;
+    const context = { origin, connectionId, isAdmin } as IContext;
     const handler = this.findRoute(names);
     try {
       const { data } = await this.execInputModules!(
