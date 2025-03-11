@@ -90,6 +90,13 @@ class TgConnection implements IInputConnection {
       const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
       const inlineKyeboard = new InlineKeyboard(btns);
       return ctx.reply('OPEN', { reply_markup: inlineKyeboard });
+    } else {
+      const text = `
+Цей інструмент створено для бажаючих допомагати притулку.
+Ви зможете отримувати повідомлення про поточний стан справ та потреби.
+Щоб обрати зручний варіант підписки - натисність <b>OPEN</b>.
+`;
+      return ctx.reply(text, { parse_mode: 'HTML' });
     }
   }
 
