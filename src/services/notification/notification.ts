@@ -38,7 +38,7 @@ export class NotificationService {
     }
   }
 
-  async sendForUsers(users: ITableUsers[], message: ITableMessages) {
+  sendForUsers(users: ITableUsers[], message: ITableMessages) {
     for (const user of users) {
       this.tgStream.push({ user, message });
     }

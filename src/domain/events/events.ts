@@ -5,7 +5,7 @@ import { ITableMessages, ITableUsers } from '../types/db.types';
 
 const SUBJECT_BY_TEG: Record<string, SubscriptionSubjectKeys> = {
   '#news': 'URGENT',
-  '#новини': 'URGENT',
+  '#новина': 'URGENT',
   '#report': 'REPORT',
   '#звіт': 'REPORT',
 };
@@ -18,7 +18,7 @@ export class Events {
 
     let text = t;
     if (!text) {
-      return false;
+      throw new Error('Empty message');
     }
 
     const [tag] = text!.split(/\s/);
@@ -29,16 +29,16 @@ export class Events {
         this.echo(chat.id, text);
         return true;
       }
-      return false;
+      throw new Error('No chat id');
     }
 
     const [savedMessage] = await execQuery.message.get([subject]);
     if (savedMessage && savedMessage.message_id > message_id) {
-      return false;
+      throw new Error('Message can not be updated');
     }
     await execQuery.message.remove([subject]);
 
-    text = text.replace(RegExp(`^${tag}\\s`), `${tag}\n`);
+    text = text.replace(RegExp(`^${tag}\\s`, 'i'), `${tag}\n`);
     await execQuery.message.update([
       message_id,
       subject,
@@ -46,14 +46,14 @@ export class Events {
       new Date((edit_date || date) * 1000),
     ]);
 
-    this.sendMessage(subject);
+    await this.sendMessage(subject);
 
     return true;
   }
 
   echo(chatId: number, text: string) {
-    let content = text!.replace(RegExp(`^#test\\s`, 'i'), `#test\n`);
-    content = text!.replace(RegExp(`^#тест\\s`, 'i'), `#тест\n`);
+    let content = text.replace(/^#test\s/i, `#test\n`);
+    content = content.replace(/^#тест\s/i, `#тест\n`);
     const user = { chat_id: chatId.toString() } as ITableUsers;
     const message = { content } as ITableMessages;
     this.notifService.sendForUsers([user], message);

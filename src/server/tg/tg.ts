@@ -6,6 +6,7 @@ import { IInputConnection } from '../types';
 import { ITgConfig, ITgServer } from './types';
 import { ServerError } from '../errors';
 import { getOparation } from './getOperation';
+import { greeting, forbidden } from './reply';
 
 class TgConnection implements IInputConnection {
   private exec?: THandleOperation;
@@ -76,28 +77,19 @@ class TgConnection implements IInputConnection {
 
     if (operation) {
       try {
-        await this.exec!(operation);
-        // const result = await this.exec!(operation);
-        // if (result) return ctx.reply('success');
-        // else return ctx.reply('bad command');
+        const result = await this.exec!(operation);
+        if (result) {
+          return; // ctx.reply('Відправлено');
+        } else {
+          forbidden(ctx);
+        }
       } catch (e) {
-        ctx.reply('error');
+        ctx.reply('Сталася помилка!');
       }
       return;
     }
 
-    if (env.DEV === 'true') {
-      const btns = [[{ text: this.origin, web_app: { url: this.origin } }]];
-      const inlineKyeboard = new InlineKeyboard(btns);
-      return ctx.reply('OPEN', { reply_markup: inlineKyeboard });
-    } else {
-      const text = `
-Цей інструмент створено для бажаючих допомагати притулку.
-Ви зможете отримувати повідомлення про поточний стан справ та потреби.
-Щоб обрати зручний варіант підписки - натисність <b>OPEN</b>.
-`;
-      return ctx.reply(text, { parse_mode: 'HTML' });
-    }
+    greeting(ctx);
   }
 
   private async sendNotification(chatId: string, text?: string) {
