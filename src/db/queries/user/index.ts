@@ -3,6 +3,8 @@ import { ITableUsers } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 import { IQueriesUserToken } from './token';
 import { IQueriesUserMessenger } from './messenger';
+import { IQueriesUserNets } from './nets';
+import { IQueriesUserNetData } from './netData';
 
 export interface IQueriesUser {
   get: TQuery<[['user_id', number]], ITableUsers>;
@@ -27,6 +29,8 @@ export interface IQueriesUser {
   >;
   token: IQueriesUserToken;
   messenger: IQueriesUserMessenger;
+  nets: IQueriesUserNets;
+  netData: IQueriesUserNetData;
 }
 
 export const get = `

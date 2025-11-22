@@ -20,6 +20,7 @@ import {
   TOutputModulesKeys,
   TServicesKeys,
 } from './constants';
+import { Member } from '../domain/member/member';
 
 export interface IControllerConfig {
   path: string;
@@ -84,6 +85,7 @@ export type IContext = {
   origin: string;
   connectionId?: number;
   isAdmin?: boolean;
+  member?: Member;
 };
 
 export type ISessionContent = Partial<{

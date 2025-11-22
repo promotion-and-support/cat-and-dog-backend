@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as P from './types';
 
 export type TAccountLogin_tg = {

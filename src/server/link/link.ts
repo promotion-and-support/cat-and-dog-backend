@@ -9,7 +9,8 @@ class LinkConnection implements IInputConnection {
   private static counter = 0;
   private static connections = new Map<number, ILinkConnection>();
 
-  static getClient(onMessage: ILinkConnection['onMessage']) {
+  // static getClient(onMessage: ILinkConnection['onMessage']) {
+  static getClient() {
     // const connection = { onMessage };
     const sessionKey = createUnicCode(10);
     // const connectionId = LinkConnection.getConnectionId(connection);

@@ -4,14 +4,13 @@ import { HttpResponseError } from '../connection/errors';
 import { getConnection as getHttpConnection } from '../connection/http';
 import { getConnection as getWsConnection } from '../connection/ws';
 import { Store } from '../lib/store/store';
-import { IApp } from '../app';
 
 export class Api extends Store {
   private baseUrl = API_URL;
   private requests = new Set();
   api: IClientApi;
 
-  constructor(private app: IApp) {
+  constructor() {
     super({}, undefined, 'INIT');
   }
 

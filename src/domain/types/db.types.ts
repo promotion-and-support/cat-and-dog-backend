@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 export const TABLES_MAP = {
   USERS: 'users',
   USERS_TOKENS: 'users_tokens',
@@ -6,6 +7,13 @@ export const TABLES_MAP = {
   MESSAGES: 'messages',
   ROLES: 'roles',
   USERS_ROLES: 'users_roles',
+  NODES: 'nodes',
+  NETS: 'nets',
+  NETS_DATA: 'nets_data',
+  NETS_GUESTS: 'nets_guests',
+  MEMBERS: 'members',
+  MEMBERS_INVITES: 'members_invites',
+  MEMBERS_TO_MEMBERS: 'members_to_members',
 };
 
 export type OuterJoin<T> = { [key in keyof T]: T[key] | null };
@@ -56,4 +64,62 @@ export type ITableSubscriptions = {
   date: Date;
   subject: string;
   message_date: Date;
+};
+
+export type ITableNodes = {
+  node_id: number;
+  node_level: number;
+  parent_node_id: number | null;
+  net_id: number;
+  node_position: number;
+  count_of_members: number;
+  updated: string;
+};
+
+export type ITableNets = {
+  net_id: number;
+  net_level: number;
+  parent_net_id: number | null;
+  root_net_id: number; // | null
+  count_of_nets: number;
+  blocked: boolean;
+};
+
+export type ITableNetsData = {
+  net_id: number;
+  name: string;
+  goal: string | null;
+  resource_name: string | null;
+  net_link: string | null;
+};
+
+export type ITableNetsGuests = {
+  net_id: number;
+  user_id: number;
+  comment: string;
+};
+
+export type ITableMembers = {
+  member_id: number;
+  user_id: number;
+  email_show: boolean;
+  name_show: boolean;
+  mobile_show: boolean;
+  confirmed: boolean;
+};
+
+export type ITableMembersInvites = {
+  member_id: number;
+  node_id: number;
+  member_name: string;
+  token: string;
+};
+
+export type ITableMembersToMembers = {
+  branch_id: number;
+  from_member_id: number;
+  to_member_id: number;
+  dislike: boolean;
+  vote: boolean;
+  replacing: boolean;
 };

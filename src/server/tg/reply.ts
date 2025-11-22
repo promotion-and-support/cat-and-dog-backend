@@ -25,7 +25,6 @@ export const greeting = (ctx: Context) => {
 };
 
 export const forbidden = (ctx: Context) => {
-  console.log(contacts.href);
   const btns = [
     [{ text: 'КОНТАКТИ', web_app: { url: contacts.href } }],
     [{ text: 'ДОВІДКА', web_app: { url: help.href } }],

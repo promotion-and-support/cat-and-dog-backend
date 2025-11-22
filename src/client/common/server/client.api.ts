@@ -57,6 +57,37 @@ export const getApi = (
     'message': () => fetch<boolean>('/bot/message'),
 
   },
+  'net': {
+    'create': (options: P.INetCreateParams) =>
+      fetch<P.INetResponse>('/net/create', options),
+
+    'enter': (options: P.INetEnterParams) =>
+      fetch<P.INetResponse>('/net/enter', options),
+
+    'getCircle': (options: P.INetReadParams) =>
+      fetch<P.INetViewResponse>('/net/getCircle', options),
+
+    'getTree': (options: P.INetReadParams) =>
+      fetch<P.INetViewResponse>('/net/getTree', options),
+
+    'leave': (options: P.INetReadParams) =>
+      fetch<boolean>('/net/leave', options),
+
+    'update': (options: P.INetUpdateParams) =>
+      fetch<P.INetResponse>('/net/update', options),
+
+    'wait': {
+      'create': (options: P.IWaitCreateParams) =>
+        fetch<P.INetConnectByToken>('/net/wait/create', options),
+
+      'remove': (options: P.INetEnterParams) =>
+        fetch<boolean>('/net/wait/remove', options),
+
+      'get': (options: P.INetReadParams) =>
+        fetch<P.INetWaitingResponse>('/net/wait/get', options),
+
+    },
+  },
   'subscription': {
     'get': () => fetch<P.IGetSubscription>('/subscription/get'),
 
@@ -75,5 +106,18 @@ export const getApi = (
     'update': (options: P.IUserUpdateParams) =>
       fetch<P.IUserResponse>('/user/update', options),
 
+    'net': {
+      'getData': (options: P.INetEnterParams) =>
+        fetch<P.IUserNetDataResponse>('/user/net/getData', options),
+
+    },
+    'nets': {
+      'get': {
+        'all': () => fetch<P.INetsResponse>('/user/nets/get/all'),
+
+        'wait': () => fetch<P.IWaitNets>('/user/nets/get/wait'),
+
+      },
+    },
   },
 });
