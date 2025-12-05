@@ -2,7 +2,7 @@ import * as T from '../../server/types/types';
 import { IMember } from '../types';
 import { HttpResponseError } from '../connection/errors';
 import { getMemberStatus } from '../../server/utils';
-import { Store } from '@client/lib/store/store';
+import { Store } from '../lib/store/store';
 import { IApp } from '../app';
 
 interface NetState {
@@ -161,6 +161,7 @@ export class Net extends Store<NetState> {
       return result;
     } catch (e: any) {
       this.setError(e);
+      throw e;
     }
   }
 

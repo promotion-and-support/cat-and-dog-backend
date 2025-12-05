@@ -5,6 +5,7 @@ import { Account } from './services/account.service';
 import { Subscription } from './services/subscription.service';
 import { Api } from './services/api.service';
 import { Net } from './services/net.service';
+import { UserNets } from './services/user.nets.class';
 
 export interface IApp extends Store<AppState> {
   apiService: Api;
@@ -27,6 +28,7 @@ export class App extends Store<AppState> {
   account: Account = new Account(this);
   subscription: Subscription = new Subscription(this);
   net: Net = new Net(this);
+  userNets: UserNets = new UserNets(this);
 
   constructor() {
     super(INITIAL_STATE, undefined, 'INIT');
@@ -55,7 +57,7 @@ export class App extends Store<AppState> {
       // error: this.error,
       ...this.account.state,
       userStatus: this.state.userStatus,
-      // ...this.userNets.getUserNets(),
+      ...this.userNets.state,
       // events: this.userEvents.getEvents(),
       ...this.net.state,
       // ...this.chat.getChatState(),
@@ -84,12 +86,11 @@ export class App extends Store<AppState> {
     else this.setState({ userStatus: 'INVITING' });
   }
 
-  private onNewUser() {
+  private async onNewUser() {
     const { user } = this.account.state;
     if (!user) this.setInitialValues();
     else if (user.user_status === 'LOGGEDIN') {
-      // await this.onNewNets();
-      // readChanges && (await this.userEvents.read(true));
+      await this.userNets.getAllNets();
     }
     this.setUserStatus();
     // this.emit('user', user);
