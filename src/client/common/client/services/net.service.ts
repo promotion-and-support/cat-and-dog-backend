@@ -175,4 +175,16 @@ export class Net extends Store<NetState> {
     const { name, member_name: memberName } = member;
     return name || memberName || `Учасник ${position}`;
   }
+
+  async connectByInvite(args: T.ITokenParams) {
+    try {
+      const result = await this.app.api.net.connectByToken(args);
+      const { error } = result || {};
+      if (!error) await this.app.onNewNets();
+      return result;
+    } catch (e: any) {
+      this.setError(e);
+      throw e;
+    }
+  }
 }

@@ -92,6 +92,9 @@ export const getApi = (
     },
   },
   'net': {
+    'connectByToken': (options: P.ITokenParams) =>
+      fetch<P.INetConnectByToken>('/net/connectByToken', options),
+
     'create': (options: P.INetCreateParams) =>
       fetch<P.INetResponse>('/net/create', options),
 

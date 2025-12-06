@@ -100,4 +100,9 @@ export class App extends Store<AppState> {
     // this.userNets.getNets();
     this.setUserStatus();
   }
+
+  async onNewNets() {
+    await this.userNets.getAllNets();
+    // await this.chat.connectAll();
+  }
 }
