@@ -55,7 +55,7 @@ export class App extends Store<AppState> {
     return {
       // status: this.status,
       // error: this.error,
-      ...this.account.state,
+      ...this.account.getState(),
       userStatus: this.state.userStatus,
       ...this.userNets.state,
       // events: this.userEvents.getEvents(),

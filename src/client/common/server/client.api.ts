@@ -57,6 +57,40 @@ export const getApi = (
     'message': () => fetch<boolean>('/bot/message'),
 
   },
+  'member': {
+    'data': {
+      'dislike': {
+        'set': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/dislike/set', options),
+
+        'unSet': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/dislike/unSet', options),
+
+      },
+      'vote': {
+        'set': (options: P.IMemberConfirmParams) =>
+          fetch<Q.TMemberDataVoteSetResponse>('/member/data/vote/set', options),
+
+        'unSet': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/vote/unSet', options),
+
+      },
+    },
+    'invite': {
+      'cancel': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/cancel', options),
+
+      'confirm': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/confirm', options),
+
+      'create': (options: P.IMemberInviteParams) =>
+        fetch<Q.TMemberInviteCreateResponse>('/member/invite/create', options),
+
+      'refuse': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/refuse', options),
+
+    },
+  },
   'net': {
     'create': (options: P.INetCreateParams) =>
       fetch<P.INetResponse>('/net/create', options),

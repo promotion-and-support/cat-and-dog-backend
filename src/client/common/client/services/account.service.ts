@@ -1,7 +1,8 @@
 import { INIT_DATA } from '../../../local/imports';
 import * as T from '../../server/types/types';
 import { Store } from '../lib/store/store';
-import { IApp } from '../app';
+import { App } from '../app';
+import { Messenger } from './messenger.service';
 
 interface AccountState {
   user: T.IUserResponse;
@@ -9,10 +10,11 @@ interface AccountState {
 
 export class Account extends Store<AccountState> {
   private tg: WebApp;
+  private messenger: Messenger;
 
-  constructor(private app: IApp) {
+  constructor(private app: App) {
     super({ user: null }, undefined, 'INIT');
-
+    this.messenger = new Messenger(app);
     const { initData } = Telegram.WebApp;
     if (initData) {
       this.tg = Telegram.WebApp;
@@ -21,7 +23,16 @@ export class Account extends Store<AccountState> {
     }
   }
 
+  getState() {
+    return {
+      ...this.state,
+      tg: this.tg,
+      bot: this.messenger.getState(),
+    };
+  }
+
   async init() {
+    await this.messenger.init();
     await this.login();
     if (!this.$state.user) {
       await this.signupTg();

@@ -3,7 +3,8 @@ import { IMember } from '../types';
 import { HttpResponseError } from '../connection/errors';
 import { getMemberStatus } from '../../server/utils';
 import { Store } from '../lib/store/store';
-import { IApp } from '../app';
+import { App } from '../app';
+import { Member } from './member.service';
 
 interface NetState {
   userNet: T.INetResponse;
@@ -11,6 +12,7 @@ interface NetState {
   circle: IMember[];
   tree: IMember[];
   netView?: T.NetViewEnum;
+  member: Member | null;
 }
 
 const INITIAL_STATE: NetState = {
@@ -18,22 +20,23 @@ const INITIAL_STATE: NetState = {
   userNetData: null,
   circle: [],
   tree: [],
+  member: null,
 };
 
 export class Net extends Store<NetState> {
-  constructor(private app: IApp) {
+  constructor(private app: App) {
     super(INITIAL_STATE);
   }
 
-  // async onNetChanged() {
-  //   this.enter(this.userNet!.net_id, true);
-  // }
+  async onNetChanged() {
+    await this.enter(this.state.userNet!.net_id);
+  }
 
-  // async onMemberChanged() {
-  //   if (this.netView === 'tree') await this.getTree();
-  //   else await this.getCircle();
-  //   if (this.member) this.findMember(this.member.getMember().node_id);
-  // }
+  async onMemberChanged() {
+    if (this.state.netView === 'tree') await this.getTree();
+    else await this.getCircle();
+    if (this.state.member) this.findMember(this.state.member.getMember().node_id);
+  }
 
   // async onUserNetDataChanged() {
   //   await this.getUserData(true);
@@ -46,7 +49,8 @@ export class Net extends Store<NetState> {
     const { [netView!]: netViewData } = this.state;
     const memberPosition = netViewData.findIndex((item) => item.node_id === nodeId);
     const member = netViewData[memberPosition];
-    if (!member) this.setError(new HttpResponseError(404));
+    if (member) this.setState({ member: new Member(member, this.app, this) });
+    else this.setError(new HttpResponseError(404));
   }
 
   private async setNet(userNet: T.INetResponse = null) {
