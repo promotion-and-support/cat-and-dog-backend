@@ -65,7 +65,7 @@ export class App extends Store<AppState> {
   }
 
   private setInitialValues() {
-    // this.userNets = new UserNets(this as any);
+    this.userNets = new UserNets(this);
     // this.chat = new Chat(this as any);
     // this.userEvents = new Events(this as any);
   }
@@ -93,7 +93,6 @@ export class App extends Store<AppState> {
       await this.userNets.getAllNets();
     }
     this.setUserStatus();
-    // this.emit('user', user);
   }
 
   private onNewNet() {
