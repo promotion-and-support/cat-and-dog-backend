@@ -91,6 +91,7 @@ export class App extends Store<AppState> {
     if (!user) this.setInitialValues();
     else if (user.user_status === 'LOGGEDIN') {
       await this.userNets.getAllNets();
+      await this.userNets.getWaitNets();
     }
     this.setUserStatus();
   }

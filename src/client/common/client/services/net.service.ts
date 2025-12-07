@@ -5,6 +5,7 @@ import { getMemberStatus } from '../../server/utils';
 import { Store } from '../lib/store/store';
 import { App } from '../app';
 import { Member } from './member.service';
+import { MemberActions } from './memberActions.class';
 
 interface NetState {
   userNet: T.INetResponse;
@@ -24,8 +25,11 @@ const INITIAL_STATE: NetState = {
 };
 
 export class Net extends Store<NetState> {
+  public memberActions: MemberActions;
+
   constructor(private app: App) {
     super(INITIAL_STATE);
+    this.memberActions = new MemberActions(this.app, this);
   }
 
   async onNetChanged() {
@@ -38,11 +42,11 @@ export class Net extends Store<NetState> {
     if (this.state.member) this.findMember(this.state.member.getMember().node_id);
   }
 
-  // async onUserNetDataChanged() {
-  //   await this.getUserData(true);
-  //   if (this.netView === 'tree') this.app.emit('tree', { ...this.tree });
-  //   else this.app.emit('circle', { ...this.circle });
-  // }
+  async onUserNetDataChanged() {
+    await this.getUserData();
+    if (this.state.netView === 'tree') this.setState({ tree: [...this.state.tree] });
+    else this.setState({ circle: [...this.state.circle] });
+  }
 
   findMember(nodeId: number) {
     const { netView } = this.state;
