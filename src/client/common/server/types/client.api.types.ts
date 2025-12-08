@@ -8,6 +8,12 @@ export type TAccountSignup_tg = {
   initData: string;
 };
 export type TAccountMessengerLinkGetResponse = string | null;
+export type TEventsRead = {
+  event_id?: number;
+};
+export type TEventsConfirm = {
+  event_id: number;
+};
 export type TMemberDataVoteSetResponse = boolean | null;
 export type TMemberInviteCreateResponse = string | null;
 export type TSubscriptionRemove = {

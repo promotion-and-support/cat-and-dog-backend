@@ -34,11 +34,11 @@ export const set: THandler<IMemberConfirmParams, boolean | null> = async (
     event = new domain.event.NetEvent(net_id, 'VOTE', m!.get());
     const net = new domain.net.NetArrange(t);
     const result = await net.checkVotes(event, parent_node_id);
-    // !result && (await event.messages.create(t));
-    // await event.commit(t);
+    !result && (await event.messages.create(t));
+    await event.commit(t);
     return result;
   });
-  // event?.send();
+  event?.send();
   return result;
 };
 set.paramsSchema = MemberConfirmParamsSchema;
@@ -50,7 +50,7 @@ export const unSet: THandler<IMemberConfirmParams, boolean> = async (
   { member_node_id },
 ) => {
   const m = actionMember!.get();
-  const { node_id, parent_node_id } = m;
+  const { net_id, node_id, parent_node_id } = m;
   if (!parent_node_id) return false; // bad request
   const [member] = await execQuery.member.find.inCircle([
     parent_node_id,
@@ -60,10 +60,10 @@ export const unSet: THandler<IMemberConfirmParams, boolean> = async (
   const memberStatus = getMemberStatus(member);
   if (memberStatus !== 'ACTIVE') return false; // bad request
   await execQuery.member.data.unsetVote([parent_node_id, node_id]);
-  // const event = new domain.event.NetEvent(net_id, 'VOTE', m);
-  // await event.messages.create();
-  // await event.commit();
-  // event.send();
+  const event = new domain.event.NetEvent(net_id, 'VOTE', m);
+  await event.messages.create();
+  await event.commit();
+  event.send();
   return true;
 };
 unSet.paramsSchema = MemberConfirmParamsSchema;

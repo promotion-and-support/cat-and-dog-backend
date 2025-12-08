@@ -2,7 +2,7 @@ import Joi from 'joi';
 // eslint-disable-next-line max-len
 import { IMemberConfirmParams } from '../../../client/common/server/types/types';
 import { THandler } from '../../../controller/types';
-// import { NetEvent } from '../../../domain/event/event';
+import { NetEvent } from '../../../domain/event/event';
 import { MemberConfirmParamsSchema } from '../../schema/schema';
 import { getMemberStatus } from '../../../client/common/server/utils';
 
@@ -11,7 +11,7 @@ const confirm: THandler<IMemberConfirmParams, boolean> = async (
   { node_id, member_node_id },
 ) => {
   const { net_id } = m!.get();
-  // let event!: NetEvent;
+  let event!: NetEvent;
   const result = await domain.utils.exeWithNetLock(net_id, async (t) => {
     await m!.reinit();
     const [member] = await execQuery.member.find.inTree([
@@ -26,13 +26,13 @@ const confirm: THandler<IMemberConfirmParams, boolean> = async (
     await net.updateCountOfMembers(member_node_id);
     await domain.net.createTree(t, member);
 
-    // event = new domain.event.NetEvent(net_id, 'CONFIRM', member);
-    // await event.messages.create(t);
-    // await event.commit(t);
+    event = new domain.event.NetEvent(net_id, 'CONFIRM', member);
+    await event.messages.create(t);
+    await event.commit(t);
 
     return true;
   });
-  // event?.send();
+  event?.send();
   return result;
 };
 confirm.paramsSchema = MemberConfirmParamsSchema;

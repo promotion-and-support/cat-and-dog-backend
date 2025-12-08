@@ -6,6 +6,7 @@ import { Subscription } from './services/subscription.service';
 import { Api } from './services/api.service';
 import { Net } from './services/net.service';
 import { UserNets } from './services/user.nets.class';
+import { EventService } from './services/events.class';
 
 export interface IApp extends Store<AppState> {
   apiService: Api;
@@ -24,11 +25,12 @@ const INITIAL_STATE: AppState = {
 };
 
 export class App extends Store<AppState> {
-  apiService: Api = new Api();
+  apiService: Api = new Api(this.handleConnect.bind(this), this.setMessage.bind(this));
   account: Account = new Account(this);
   subscription: Subscription = new Subscription(this);
   net: Net = new Net(this);
   userNets: UserNets = new UserNets(this);
+  userEvents: EventService = new EventService(this);
 
   constructor() {
     super(INITIAL_STATE, undefined, 'INIT');
@@ -58,10 +60,19 @@ export class App extends Store<AppState> {
       ...this.account.getState(),
       userStatus: this.state.userStatus,
       ...this.userNets.state,
-      // events: this.userEvents.getEvents(),
+      events: this.userEvents.getEvents(),
       ...this.net.state,
       // ...this.chat.getChatState(),
     };
+  }
+
+  private handleConnect() {
+    // if (this.status === AppStatus.INITING) return;
+    const { user_status } = this.getState().user || {};
+    if (user_status === 'NOT_LOGGEDIN') return;
+    // this.chat.connectAll().catch((e) => this.setError(e));
+    this.api.chat.connect.user().catch((e) => this.setError(e));
+    this.userEvents.read().catch((e) => this.setError(e));
   }
 
   private setInitialValues() {
@@ -104,5 +115,44 @@ export class App extends Store<AppState> {
   async onNewNets() {
     await this.userNets.getAllNets();
     // await this.chat.connectAll();
+  }
+
+  async onNewEvents(events: T.IEvents) {
+    const { userNet: net } = this.getState();
+    const { net_id } = net || {};
+    let updateUser = false;
+    let updateNet = false;
+    for (const event of events) {
+      const { net_id: eventNetId, net_view: netView, message } = event;
+      if (!eventNetId) {
+        updateUser = true;
+        break;
+      }
+      if (net_id === eventNetId || !netView) updateNet = true;
+      if (!message) this.userEvents.drop(event);
+    }
+    if (updateUser) {
+      if (net_id) {
+        try {
+          await this.net.enter(net_id);
+        } catch {
+          window.location.href = window.location.origin;
+          return;
+        }
+      }
+      await this.onNewUser().catch(console.log);
+    }
+    if (updateNet) await this.net.enter(net_id!).catch(console.log);
+    // this.emit('events', this.userEvents.getEvents());
+  }
+
+  setMessage<T extends T.MessageTypeKeys>(messageData: T.IMessage<T>) {
+    if (!messageData) return;
+
+    if (this.userEvents.isEventMessage(messageData)) {
+      return this.userEvents.newEventMessage(messageData);
+    }
+
+    // this.chat.setMessage(messageData);
   }
 }

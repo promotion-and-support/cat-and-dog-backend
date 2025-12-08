@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
-// import { ITableEvents } from '../../../local/imports';
-// import { MessageTypeKeys } from './messages.types';
-// import { NetViewKeys } from './net.types';
+import { ITableEvents } from '../../../local/imports';
+import { MessageTypeKeys } from './messages.types';
+import { NetViewKeys } from './net.types';
 
 export const NET_EVENT_MAP = {
   LEAVE: 'leave',
@@ -26,20 +26,20 @@ export const NET_EVENT_MAP = {
 };
 export type NetEventKeys = keyof typeof NET_EVENT_MAP;
 
-// export type IEvent = Omit<ITableEvents, 'net_view' | 'event_type'> & {
-//   net_view: NetViewKeys | null;
-//   event_type: NetEventKeys;
-// };
-// export type IEventRecord = Omit<
-//   IEvent,
-//   'event_id' | 'event_type' | 'net_id' | 'date'
-// > & { net_id?: null };
-// export type IEvents = IEvent[];
+export type IEvent = Omit<ITableEvents, 'net_view' | 'event_type'> & {
+  net_view: NetViewKeys | null;
+  event_type: NetEventKeys;
+};
+export type IEventRecord = Omit<
+  IEvent,
+  'event_id' | 'event_type' | 'net_id' | 'date'
+> & { net_id?: null };
+export type IEvents = IEvent[];
 
-// export type IEventMessage = {
-//   type: Extract<MessageTypeKeys, 'EVENT'>;
-// } & IEvent;
+export type IEventMessage = {
+  type: Extract<MessageTypeKeys, 'EVENT'>;
+} & IEvent;
 
-// export interface INewEventsMessage {
-//   type: Extract<MessageTypeKeys, 'NEW_EVENTS'>;
-// }
+export interface INewEventsMessage {
+  type: Extract<MessageTypeKeys, 'NEW_EVENTS'>;
+}

@@ -4,6 +4,7 @@ import { IDatabase, IDatabaseQueries } from '../db/types/types';
 import { IController } from '../controller/types';
 import { IInputConnection, IConnectionService } from '../server/types';
 import { IMailService } from '../services/mail/types';
+import { ChatService } from '../services/chat/chat';
 import { NotificationService } from '../services/notification/notification';
 import { IDomain } from '../domain';
 import App from './app';
@@ -36,6 +37,7 @@ export interface IGlobalMixins {
   messengerService: IConnectionService;
   cryptoService: typeof import('../utils/crypto');
   mailService: IMailService;
+  chatService: ChatService;
   env: IConfig['env'];
   domain: IDomain;
 }
@@ -48,6 +50,7 @@ declare global {
   const messengerService: IConnectionService;
   const cryptoService: typeof import('../utils/crypto');
   const mailService: IMailService;
+  const chatService: ChatService;
   const notificationService: NotificationService;
   const env: IConfig['env'];
   const domain: IDomain;

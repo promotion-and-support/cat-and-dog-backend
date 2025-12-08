@@ -57,6 +57,22 @@ export const getApi = (
     'message': () => fetch<boolean>('/bot/message'),
 
   },
+  'chat': {
+    'connect': {
+      'user': () => fetch<boolean>('/chat/connect/user'),
+
+    },
+    'removeConnection': () => fetch<boolean>('/chat/removeConnection'),
+
+  },
+  'events': {
+    'read': (options: Q.TEventsRead) =>
+      fetch<P.IEvents>('/events/read', options),
+
+    'confirm': (options: Q.TEventsConfirm) =>
+      fetch<boolean>('/events/confirm', options),
+
+  },
   'member': {
     'data': {
       'dislike': {

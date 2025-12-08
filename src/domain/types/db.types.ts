@@ -14,6 +14,8 @@ export const TABLES_MAP = {
   MEMBERS: 'members',
   MEMBERS_INVITES: 'members_invites',
   MEMBERS_TO_MEMBERS: 'members_to_members',
+  EVENTS: 'events',
+  USERS_EVENTS: 'users_events',
 };
 
 export type OuterJoin<T> = { [key in keyof T]: T[key] | null };
@@ -122,4 +124,20 @@ export type ITableMembersToMembers = {
   dislike: boolean;
   vote: boolean;
   replacing: boolean;
+};
+
+export type ITableEvents = {
+  event_id: number;
+  user_id: number;
+  net_id: number | null;
+  net_view: 'net' | 'tree' | 'circle' | null /* NetViewKeys */;
+  from_node_id: number | null;
+  event_type: string /* NetEventKeys */;
+  message: string;
+  date: string;
+};
+
+export type ITableUsersEvents = {
+  user_id: number;
+  notification_date: string;
 };

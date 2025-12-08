@@ -1,4 +1,8 @@
 import ws from 'ws';
+import {
+  IMessage,
+  MessageTypeKeys,
+} from '../../client/common/server/types/types';
 import { IOperation, TOperationResponse } from '../../types/operation.types';
 import { TWsResModulesKeys } from './constants';
 
@@ -17,5 +21,5 @@ export type TWsResModule<T = any> = (
 ) => (
   connection: IWsConnection | IWsConnection[],
   options: IOperation['options'] | null,
-  data: TOperationResponse | Record<string, string>,
+  data: TOperationResponse | IMessage<MessageTypeKeys>,
 ) => Promise<boolean>;

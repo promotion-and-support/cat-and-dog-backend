@@ -17,6 +17,7 @@ export type TOutputModulesKeys = keyof typeof OUTPUT_MODULES_MAP;
 
 export const SERVICES_MAP = {
   mailService: 'mail/mail.js',
+  chatService: 'chat/chat.js',
   notificationService: 'notification/notification.js',
 };
 export type TServicesKeys = keyof typeof SERVICES_MAP;

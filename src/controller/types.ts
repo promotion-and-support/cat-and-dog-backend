@@ -13,6 +13,7 @@ import {
   UserStatusKeys,
 } from '../client/common/server/types/types';
 import { IMailService } from '../services/mail/types';
+import { ChatService } from '../services/chat/chat';
 import { NotificationService } from '../services/notification/notification';
 import { Session } from '../services/session/session';
 import {
@@ -95,6 +96,7 @@ export type ISessionContent = Partial<{
 
 export interface IServices {
   mailService?: IMailService;
+  chatService?: ChatService;
   notificationService?: NotificationService;
 }
 

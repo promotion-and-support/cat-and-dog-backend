@@ -30,15 +30,15 @@ export const set: THandler<IMemberConfirmParams, boolean> = async (
     }
     const memberStatus = getMemberStatus(member);
     if (memberStatus !== 'ACTIVE') return false; // bad request
-    // event = new domain.event.NetEvent(net_id, 'DISLIKE', m!.get());
+    event = new domain.event.NetEvent(net_id, 'DISLIKE', m!.get());
     const net = await new domain.net.NetArrange(t);
     const params = [parentNodeId!, node_id, member_node_id] as const;
     await t.execQuery.member.data.setDislike([...params]);
     await net.arrangeNodes(event, [parentNodeId]);
-    // await event.commit(t);
+    await event.commit(t);
     return true;
   });
-  // event?.send();
+  event?.send();
   return result;
 };
 set.paramsSchema = MemberConfirmParamsSchema;
