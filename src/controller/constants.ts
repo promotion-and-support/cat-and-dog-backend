@@ -5,6 +5,7 @@ export const INPUT_MODULES_MAP = {
   checkAuthorized: 'checkAuthorized.js',
   getStream: 'get.stream.js',
   validateInput: 'validate.input.js',
+  setUserNet: 'set.user.net.js',
 };
 export type TInputModulesKeys = keyof typeof INPUT_MODULES_MAP;
 
@@ -16,6 +17,7 @@ export type TOutputModulesKeys = keyof typeof OUTPUT_MODULES_MAP;
 
 export const SERVICES_MAP = {
   mailService: 'mail/mail.js',
+  chatService: 'chat/chat.js',
   notificationService: 'notification/notification.js',
 };
 export type TServicesKeys = keyof typeof SERVICES_MAP;

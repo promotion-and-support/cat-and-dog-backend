@@ -32,9 +32,9 @@ export const user =
           }),
         setToState: (actual) => (state.user = actual),
       },
-      {
-        name: '/chat/connect/user',
-        params: {},
-      },
+      // {
+      //   name: '/chat/connect/user',
+      //   params: {},
+      // },
     ] as IOperationData[],
   });

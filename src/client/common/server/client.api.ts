@@ -57,6 +57,90 @@ export const getApi = (
     'message': () => fetch<boolean>('/bot/message'),
 
   },
+  'chat': {
+    'connect': {
+      'user': () => fetch<boolean>('/chat/connect/user'),
+
+    },
+    'removeConnection': () => fetch<boolean>('/chat/removeConnection'),
+
+  },
+  'events': {
+    'read': (options: Q.TEventsRead) =>
+      fetch<P.IEvents>('/events/read', options),
+
+    'confirm': (options: Q.TEventsConfirm) =>
+      fetch<boolean>('/events/confirm', options),
+
+  },
+  'member': {
+    'data': {
+      'dislike': {
+        'set': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/dislike/set', options),
+
+        'unSet': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/dislike/unSet', options),
+
+      },
+      'vote': {
+        'set': (options: P.IMemberConfirmParams) =>
+          fetch<Q.TMemberDataVoteSetResponse>('/member/data/vote/set', options),
+
+        'unSet': (options: P.IMemberConfirmParams) =>
+          fetch<boolean>('/member/data/vote/unSet', options),
+
+      },
+    },
+    'invite': {
+      'cancel': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/cancel', options),
+
+      'confirm': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/confirm', options),
+
+      'create': (options: P.IMemberInviteParams) =>
+        fetch<Q.TMemberInviteCreateResponse>('/member/invite/create', options),
+
+      'refuse': (options: P.IMemberConfirmParams) =>
+        fetch<boolean>('/member/invite/refuse', options),
+
+    },
+  },
+  'net': {
+    'connectByToken': (options: P.ITokenParams) =>
+      fetch<P.INetConnectByToken>('/net/connectByToken', options),
+
+    'create': (options: P.INetCreateParams) =>
+      fetch<P.INetResponse>('/net/create', options),
+
+    'enter': (options: P.INetEnterParams) =>
+      fetch<P.INetResponse>('/net/enter', options),
+
+    'getCircle': (options: P.INetReadParams) =>
+      fetch<P.INetViewResponse>('/net/getCircle', options),
+
+    'getTree': (options: P.INetReadParams) =>
+      fetch<P.INetViewResponse>('/net/getTree', options),
+
+    'leave': (options: P.INetReadParams) =>
+      fetch<boolean>('/net/leave', options),
+
+    'update': (options: P.INetUpdateParams) =>
+      fetch<P.INetResponse>('/net/update', options),
+
+    'wait': {
+      'create': (options: P.IWaitCreateParams) =>
+        fetch<P.INetConnectByToken>('/net/wait/create', options),
+
+      'remove': (options: P.INetEnterParams) =>
+        fetch<boolean>('/net/wait/remove', options),
+
+      'get': (options: P.INetReadParams) =>
+        fetch<P.INetWaitingResponse>('/net/wait/get', options),
+
+    },
+  },
   'subscription': {
     'get': () => fetch<P.IGetSubscription>('/subscription/get'),
 
@@ -75,5 +159,18 @@ export const getApi = (
     'update': (options: P.IUserUpdateParams) =>
       fetch<P.IUserResponse>('/user/update', options),
 
+    'net': {
+      'getData': (options: P.INetEnterParams) =>
+        fetch<P.IUserNetDataResponse>('/user/net/getData', options),
+
+    },
+    'nets': {
+      'get': {
+        'all': () => fetch<P.INetsResponse>('/user/nets/get/all'),
+
+        'wait': () => fetch<P.IWaitNets>('/user/nets/get/wait'),
+
+      },
+    },
   },
 });

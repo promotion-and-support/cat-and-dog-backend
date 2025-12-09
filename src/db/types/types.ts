@@ -4,6 +4,10 @@ import { IQueriesSession } from '../queries/session';
 import { IQueriesSubscription } from '../queries/subscription';
 import { IQueriesMessage } from '../queries/message';
 import { IQueriesRole } from '../queries/role';
+import { IQueriesNet } from '../queries/net';
+import { IQueriesMember } from '../queries/member';
+import { IQueriesNode } from '../queries/node';
+import { IQueriesEvents } from '../queries/events';
 
 export interface IDatabaseConfig {
   path: string;
@@ -54,6 +58,10 @@ export interface IDatabaseQueries {
   subscription: IQueriesSubscription;
   message: IQueriesMessage;
   role: IQueriesRole;
+  net: IQueriesNet;
+  member: IQueriesMember;
+  node: IQueriesNode;
+  events: IQueriesEvents;
 }
 
 export interface IQueries {

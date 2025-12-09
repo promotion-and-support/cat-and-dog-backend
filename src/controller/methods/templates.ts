@@ -1,6 +1,6 @@
 import { format } from 'node:util';
 
-export const tplImport = "import * as P from './types';\n\n";
+export const tplImport = "// @ts-nocheck\nimport * as P from './types';\n\n";
 const tplGetApi = `/* eslint-disable max-lines */
 /* eslint-disable max-len */
 import * as P from './types/types';

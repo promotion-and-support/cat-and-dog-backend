@@ -4,7 +4,12 @@ import { IInputConnection, IRequest } from '../types';
 import { IWsConfig, IWsConnection, IWsServer, TWsResModule } from './types';
 import { IOperation, TOperationResponse } from '../../types/operation.types';
 import { IHttpServer } from '../http/types';
+import {
+  IMessage,
+  MessageTypeKeys,
+} from '../../client/common/server/types/types';
 import { PING_INTERVAL } from '../../client/common/server/constants';
+// import { MAX_CHAT_INDEX } from '../../constants/constants';
 import { ServerError } from '../errors';
 import { handleError } from './methods/handle.error';
 import { applyResModules } from './methods/utils';
@@ -14,7 +19,7 @@ import { delay, excludeNullUndefined } from '../../utils/utils';
 class WsConnection implements IInputConnection {
   private config: IWsConfig;
   private server: IWsServer;
-  private counter = 0;
+  // private counter = 0;
   private connections = new Map<number, IWsConnection>();
   private exec?: (operation: IOperation) => Promise<TOperationResponse>;
   private resModules: ReturnType<TWsResModule>[] = [];
@@ -169,8 +174,8 @@ class WsConnection implements IInputConnection {
     this.isAlive = true;
   }
 
-  private async sendMessage(
-    data: Record<string, string>,
+  private async sendMessage<T extends MessageTypeKeys>(
+    data: IMessage<T>,
     connectionIds?: Set<number>,
   ) {
     try {

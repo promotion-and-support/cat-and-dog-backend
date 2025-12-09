@@ -4,30 +4,34 @@ import { HttpResponseError } from '../connection/errors';
 import { getConnection as getHttpConnection } from '../connection/http';
 import { getConnection as getWsConnection } from '../connection/ws';
 import { Store } from '../lib/store/store';
-import { IApp } from '../app';
 
 export class Api extends Store {
   private baseUrl = API_URL;
   private requests = new Set();
   api: IClientApi;
 
-  constructor(private app: IApp) {
+  constructor(
+    private onConnect: () => void,
+    private onMessage: (data: any) => void,
+  ) {
     super({}, undefined, 'INIT');
   }
 
   async init() {
     try {
-      const connection = this.getConnection();
+      const connection = this.tryConnection();
       this.api = getApi(connection);
       await this.api.health();
+      this.api = getApi(this.interceptor(connection));
     } catch (e: any) {
       try {
         if (!e || (e as HttpResponseError).statusCode !== 503) {
           throw new HttpResponseError(503);
         }
-        const connection = this.getConnection('ws');
+        const connection = this.tryConnection('ws');
         this.api = getApi(connection);
         await this.api.health();
+        this.api = getApi(this.interceptor(connection));
       } catch (e: any) {
         this.setError(e);
         this.events.emit('error', e);
@@ -37,6 +41,15 @@ export class Api extends Store {
     this.setState({ status: 'READY' });
   }
 
+  tryConnection(transport: 'http' | 'ws' = 'http') {
+    if (transport === 'http') {
+      return getHttpConnection(this.baseUrl);
+    }
+
+    const baseUrl = this.baseUrl.replace('http', 'ws');
+    return getWsConnection(baseUrl, this.onConnect, this.onMessage);
+  }
+
   getConnection(transport: 'http' | 'ws' = 'http') {
     if (transport === 'http') {
       const connection = getHttpConnection(this.baseUrl);
@@ -44,11 +57,7 @@ export class Api extends Store {
     }
 
     const baseUrl = this.baseUrl.replace('http', 'ws');
-    const connection = getWsConnection(
-      baseUrl,
-      () => {}, // this.handleConnect.bind(this),
-      () => {}, // this.setMessage.bind(this),
-    );
+    const connection = getWsConnection(baseUrl, this.onConnect, this.onMessage);
     return this.interceptor(connection) as typeof connection;
   }
 

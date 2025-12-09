@@ -1,7 +1,12 @@
+import {
+  IMessage,
+  MessageTypeKeys,
+} from '../../client/common/server/types/messages.types';
+
 export interface ILinkConfig {
   path: string;
 }
 
 export interface ILinkConnection {
-  onMessage: (data: Record<string, string>) => void;
+  onMessage: <T extends MessageTypeKeys>(data: IMessage<T>) => void;
 }

@@ -1,6 +1,11 @@
 import { THandleOperation } from '../../types/operation.types';
+import {
+  IMessage,
+  MessageTypeKeys,
+} from '../../client/common/server/types/messages.types';
 import { IInputConnection, IServer } from '../types';
 import { ILinkConnection } from './types';
+// import { MAX_CHAT_INDEX } from '../../constants/constants';
 import { createUnicCode } from '../../utils/crypto';
 import { excludeNullUndefined } from '../../utils/utils';
 
@@ -9,7 +14,8 @@ class LinkConnection implements IInputConnection {
   private static counter = 0;
   private static connections = new Map<number, ILinkConnection>();
 
-  static getClient(onMessage: ILinkConnection['onMessage']) {
+  // static getClient(onMessage: ILinkConnection['onMessage']) {
+  static getClient() {
     // const connection = { onMessage };
     const sessionKey = createUnicCode(10);
     // const connectionId = LinkConnection.getConnectionId(connection);
@@ -62,8 +68,8 @@ class LinkConnection implements IInputConnection {
     return LinkConnection.connections.get(connectionId);
   }
 
-  private static async sendMessage(
-    data: Record<string, string>,
+  private static async sendMessage<T extends MessageTypeKeys>(
+    data: IMessage<T>,
     connectionIds?: Set<number>,
   ) {
     if (!connectionIds) return false;

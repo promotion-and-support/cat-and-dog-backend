@@ -13,6 +13,7 @@ import {
   UserStatusKeys,
 } from '../client/common/server/types/types';
 import { IMailService } from '../services/mail/types';
+import { ChatService } from '../services/chat/chat';
 import { NotificationService } from '../services/notification/notification';
 import { Session } from '../services/session/session';
 import {
@@ -20,6 +21,7 @@ import {
   TOutputModulesKeys,
   TServicesKeys,
 } from './constants';
+import { Member } from '../domain/member/member';
 
 export interface IControllerConfig {
   path: string;
@@ -84,6 +86,7 @@ export type IContext = {
   origin: string;
   connectionId?: number;
   isAdmin?: boolean;
+  member?: Member;
 };
 
 export type ISessionContent = Partial<{
@@ -93,6 +96,7 @@ export type ISessionContent = Partial<{
 
 export interface IServices {
   mailService?: IMailService;
+  chatService?: ChatService;
   notificationService?: NotificationService;
 }
 
