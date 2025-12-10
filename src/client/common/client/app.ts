@@ -78,7 +78,7 @@ export class App extends Store<AppState> {
   private setInitialValues() {
     this.userNets = new UserNets(this);
     // this.chat = new Chat(this as any);
-    // this.userEvents = new Events(this as any);
+    this.userEvents = new EventService(this);
   }
 
   private setUserStatus() {
@@ -105,6 +105,7 @@ export class App extends Store<AppState> {
       await this.userNets.getWaitNets();
     }
     this.setUserStatus();
+    this.api.chat.connect.user().catch((e) => this.setError(e));
   }
 
   private onNewNet() {

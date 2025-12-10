@@ -107,7 +107,7 @@ const config: IConfig = {
     ws: {
       path: resolvePath('server/ws/ws'),
       modulesPath: resolvePath('server/ws/modules'),
-      resModules: ['sendResponse'],
+      resModules: ['sendResponse', 'sendChatMessage'],
     },
     link: {
       path: resolvePath('server/link/link'),

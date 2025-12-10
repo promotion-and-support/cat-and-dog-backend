@@ -1,4 +1,4 @@
-import { INIT_DATA } from '../../../local/imports';
+import { INIT_DATA, IS_DEV } from '../../../local/imports';
 import * as T from '../../server/types/types';
 import { Store } from '../lib/store/store';
 import { App } from '../app';
@@ -33,6 +33,12 @@ export class Account extends Store<AccountState> {
 
   async init() {
     await this.messenger.init();
+    if (IS_DEV) {
+      const user = await this.app.api.user.read();
+      if (user) {
+        return this.setState({ user });
+      }
+    }
     await this.login();
     if (!this.$state.user) {
       await this.signupTg();
