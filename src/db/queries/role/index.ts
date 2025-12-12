@@ -2,12 +2,26 @@ import { ITableRoles } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 
 export interface IQueriesRole {
+  setAdmin: TQuery<[['user_id', number]]>;
+  removeAdmin: TQuery;
   getByChatId: TQuery<[['chat_id', string]], ITableRoles>;
   getByChatIdAndRole: TQuery<
     [['chat_id', string], ['name', string]],
     ITableRoles
   >;
 }
+
+export const setAdmin = `
+  INSERT
+  INTO users_roles (user_id, role_id)
+  VALUES ($1, 1);
+`;
+
+export const removeAdmin = `
+  DELETE
+  FROM users_roles
+  WHERE role_id = 1;
+`;
 
 export const getByChatId = `
   SELECT r.*

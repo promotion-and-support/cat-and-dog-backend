@@ -19,35 +19,23 @@ export class Api extends Store {
 
   async init() {
     try {
-      const connection = this.tryConnection();
+      const connection = this.getConnection();
       this.api = getApi(connection);
       await this.api.health();
-      this.api = getApi(this.interceptor(connection));
     } catch (e: any) {
       try {
         if (!e || (e as HttpResponseError).statusCode !== 503) {
           throw new HttpResponseError(503);
         }
-        const connection = this.tryConnection('ws');
+        const connection = this.getConnection('ws');
         this.api = getApi(connection);
         await this.api.health();
-        this.api = getApi(this.interceptor(connection));
       } catch (e: any) {
         this.setError(e);
-        this.events.emit('error', e);
         throw e;
       }
     }
     this.setState({ status: 'READY' });
-  }
-
-  tryConnection(transport: 'http' | 'ws' = 'http') {
-    if (transport === 'http') {
-      return getHttpConnection(this.baseUrl);
-    }
-
-    const baseUrl = this.baseUrl.replace('http', 'ws');
-    return getWsConnection(baseUrl, this.onConnect, this.onMessage);
   }
 
   getConnection(transport: 'http' | 'ws' = 'http') {

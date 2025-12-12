@@ -1,6 +1,6 @@
 import * as T from '../../server/types/types';
 import { Store } from '../lib/store/store';
-import { IApp } from '../app';
+import { App } from '../app';
 
 interface SubscriptionServiceState {
   subscriptions: Record<T.SubscriptionSubjectKeys, Record<T.SubscriptionTypeKeys, boolean>>;
@@ -23,12 +23,12 @@ const getState = (): SubscriptionServiceState['subscriptions'] =>
   }) as const;
 
 export class Subscription extends Store<SubscriptionServiceState> {
-  constructor(private app: IApp) {
+  constructor(private app: App) {
     super({ subscriptions: getState() }, undefined, 'INIT');
   }
 
-  async init() {
-    await this.read();
+  reset() {
+    this.setState({ subscriptions: getState() });
   }
 
   async read() {

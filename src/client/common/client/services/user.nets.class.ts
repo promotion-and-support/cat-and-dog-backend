@@ -1,6 +1,6 @@
 import { Store } from '../lib/store/store';
 import * as T from '../../server/types/types';
-import { IApp } from '../app';
+import { App } from '../app';
 
 interface UserNetsState {
   allNets: T.INetsResponse;
@@ -8,7 +8,7 @@ interface UserNetsState {
 }
 
 export class UserNets extends Store<UserNetsState> {
-  constructor(private app: IApp) {
+  constructor(private app: App) {
     super({ allNets: [], waitNets: [] });
   }
 
@@ -62,33 +62,19 @@ export class UserNets extends Store<UserNetsState> {
   // }
 
   async getWaitNets() {
-    try {
-      const waitNets = await this.app.api.user.nets.get.wait();
-      this.setState({ waitNets });
-    } catch (e: any) {
-      this.setError(e);
-    }
+    const waitNets = await this.app.api.user.nets.get.wait();
+    this.setState({ waitNets });
   }
 
   async waitCreate(args: T.IWaitCreateParams) {
-    try {
-      const result = await this.app.api.net.wait.create(args);
-      const { error } = result || {};
-      if (!error) await this.getWaitNets();
-      return result;
-    } catch (e: any) {
-      this.setError(e);
-      throw e;
-    }
+    const result = await this.app.api.net.wait.create(args);
+    const { error } = result || {};
+    if (!error) await this.getWaitNets();
+    return result;
   }
 
   async waitRemove(args: T.INetEnterParams) {
-    try {
-      await this.app.api.net.wait.remove(args);
-      await this.getWaitNets();
-    } catch (e: any) {
-      this.setError(e);
-      throw e;
-    }
+    await this.app.api.net.wait.remove(args);
+    await this.getWaitNets();
   }
 }
