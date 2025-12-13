@@ -62,10 +62,10 @@ export class NetArrange {
     logger.debug('CREATE MESSAGES');
     await event.messages.create(t);
 
-    /* unset admin */
-    if (!parent_node_id) {
-      await t.execQuery.role.removeAdmin([]);
-    }
+    // /* unset admin */
+    // if (!parent_node_id) {
+    //   await t.execQuery.role.removeAdmin([]);
+    // }
 
     return [parent_node_id, node_id];
   }
@@ -163,10 +163,10 @@ export class NetArrange {
     const tightenEvent = event.createChild('TIGHTEN', tightenMember!);
     await tightenEvent.messages.create(t);
 
-    /* set admin */
-    if (!parent_node_id) {
-      await t.execQuery.role.setAdmin([tightenMember!.user_id]);
-    }
+    // /* set admin */
+    // if (!parent_node_id) {
+    //   await t.execQuery.role.setAdmin([tightenMember!.user_id]);
+    // }
 
     return nodeIds;
   }
@@ -226,13 +226,13 @@ export class NetArrange {
     const { node_id } = memberWithMaxVotes!;
     await this.voteNetUser(event, node_id, parent_node_id);
 
-    /* set admin */
-    const { t } = this;
-    const [voteMember] = await t.execQuery.member.get([parent_node_id]);
-    if (!voteMember!.parent_node_id) {
-      // check if root net
-      await t.execQuery.role.setAdmin([voteMember!.user_id]);
-    }
+    // /* set admin */
+    // const { t } = this;
+    // const [voteMember] = await t.execQuery.member.get([parent_node_id]);
+    // if (!voteMember!.parent_node_id) {
+    //   // check if root net
+    //   await t.execQuery.role.setAdmin([voteMember!.user_id]);
+    // }
 
     return true;
   }

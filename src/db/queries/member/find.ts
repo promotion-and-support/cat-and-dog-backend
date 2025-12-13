@@ -11,6 +11,7 @@ export interface IQueriesMemberFind {
     [['parent_node_id', number], ['member_node_id', number]],
     INodeMember
   >;
+  getByChatId: TQuery<[['chat_id', string]], IMember>;
 }
 
 export const unactive = `
@@ -63,4 +64,16 @@ export const inCircle = `
       nodes.parent_node_id = $1 OR
       nodes.node_id = $1
     )
+`;
+
+export const getByChatId = `SELECT
+    nodes.*,
+    members.*
+  FROM nodes
+  JOIN members ON
+    members.member_id = nodes.node_id
+  JOIN users ON
+    members.user_id = users.user_id
+  WHERE
+    users.chat_id = $1
 `;
