@@ -70,9 +70,11 @@ class TgConnection implements IInputConnection {
 
     if (url) {
       const inlineKyeboard = new InlineKeyboard([
-        [{ text: 'Open WebView', web_app: { url } }],
+        [{ text: url, web_app: { url } }],
       ]);
-      return ctx.reply('MENU', { reply_markup: inlineKyeboard });
+      return ctx.reply('Натисніть на лінк нижче', {
+        reply_markup: inlineKyeboard,
+      });
     }
 
     if (operation) {
