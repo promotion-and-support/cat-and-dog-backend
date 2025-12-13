@@ -132,6 +132,7 @@ export class Net extends Store<NetState> {
       const success = await this.app.api.net.leave(net!);
       if (success) {
         await this.setNet();
+        await this.app.onNewNets();
       }
       return success;
     } catch (e: any) {
