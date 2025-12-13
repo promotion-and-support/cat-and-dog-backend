@@ -1,4 +1,4 @@
-export const PING_INTERVAL = 5000;
+export const PING_INTERVAL = 30000;
 
 export const MAX_NET_LEVEL = 1;
 export const MAX_NODE_LEVEL = 5;

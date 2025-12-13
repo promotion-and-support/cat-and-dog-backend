@@ -1,5 +1,4 @@
 import * as T from '../server/types/types';
-import { IClientApi } from '../server/client.api';
 import { Store } from './lib/store/store';
 import { Account } from './services/account.service';
 import { Subscription } from './services/subscription.service';
@@ -7,14 +6,6 @@ import { Api } from './services/api.service';
 import { Net } from './services/net.service';
 import { UserNets } from './services/user.nets.class';
 import { EventService } from './services/events.class';
-
-export interface IApp extends Store<AppState> {
-  apiService: Api;
-  api: IClientApi;
-  account: Account;
-  subscription: Subscription;
-  net: Net;
-}
 
 interface AppState {
   userStatus: T.UserStatusKeys;
@@ -25,7 +16,9 @@ const INITIAL_STATE: AppState = {
 };
 
 export class App extends Store<AppState> {
-  apiService: Api = new Api(this.handleConnect.bind(this), this.setMessage.bind(this));
+  apiService: Api = new Api(() => {
+    this.handleConnect().catch(() => null);
+  }, this.setMessage.bind(this));
   account: Account = new Account(this);
   subscription: Subscription = new Subscription(this);
   net: Net = new Net(this);
@@ -38,47 +31,42 @@ export class App extends Store<AppState> {
     this.net.subscribe(() => this.onNewNet(), ['userNet']);
   }
 
+  get api() {
+    return this.apiService.api;
+  }
+
   async init() {
     try {
       await this.apiService.init();
       await this.account.init();
-      await this.subscription.init();
       this.setState({ status: 'READY' });
     } catch (e: any) {
       this.setError(e);
     }
   }
 
-  get api() {
-    return this.apiService.api;
-  }
-
   getState() {
     return {
-      // status: this.status,
-      // error: this.error,
       ...this.account.getState(),
       userStatus: this.state.userStatus,
       ...this.userNets.state,
       events: this.userEvents.getEvents(),
       ...this.net.state,
-      // ...this.chat.getChatState(),
     };
   }
 
-  private handleConnect() {
-    // if (this.status === AppStatus.INITING) return;
-    const { user_status } = this.getState().user || {};
-    if (user_status === 'NOT_LOGGEDIN') return;
-    // this.chat.connectAll().catch((e) => this.setError(e));
-    this.api.chat.connect.user().catch((e) => this.setError(e));
-    this.userEvents.read().catch((e) => this.setError(e));
+  private async handleConnect() {
+    if (this.status === 'INIT') return;
+    const { userStatus } = this.$state;
+    if (userStatus === 'NOT_LOGGEDIN') return;
+    await this.api.chat.connect.user().catch((e) => this.setError(e));
+    await this.userEvents.read().catch((e) => this.setError(e));
   }
 
   private setInitialValues() {
-    this.userNets = new UserNets(this);
-    // this.chat = new Chat(this as any);
-    // this.userEvents = new Events(this as any);
+    this.subscription.reset();
+    this.userNets.clear();
+    this.userEvents.reset();
   }
 
   private setUserStatus() {
@@ -87,8 +75,8 @@ export class App extends Store<AppState> {
       this.setState({ userStatus: 'NOT_LOGGEDIN' });
       return;
     }
-    const { userNet: net, userNetData } = this.net.state;
-    if (!net) {
+    const { userNet, userNetData } = this.net.state;
+    if (!userNet) {
       this.setState({ userStatus: user.user_status });
       return;
     }
@@ -98,27 +86,35 @@ export class App extends Store<AppState> {
   }
 
   private async onNewUser() {
-    const { user } = this.account.state;
-    if (!user) this.setInitialValues();
-    else if (user.user_status === 'LOGGEDIN') {
-      await this.userNets.getAllNets();
-      await this.userNets.getWaitNets();
+    try {
+      const { user } = this.account.state;
+      if (!user) this.setInitialValues();
+      else if (user.user_status === 'LOGGEDIN') {
+        await this.subscription.read();
+        await this.userNets.getAllNets();
+        await this.userNets.getWaitNets();
+        await this.api.chat.connect.user();
+      }
+      this.setUserStatus();
+    } catch (e) {
+      this.setError(e);
     }
-    this.setUserStatus();
   }
 
   private onNewNet() {
-    // this.userNets.getNets();
     this.setUserStatus();
   }
 
   async onNewNets() {
-    await this.userNets.getAllNets();
-    // await this.chat.connectAll();
+    try {
+      await this.userNets.getAllNets();
+    } catch (e) {
+      this.setError(e);
+    }
   }
 
   async onNewEvents(events: T.IEvents) {
-    const { userNet: net } = this.getState();
+    const { userNet: net } = this.net.state;
     const { net_id } = net || {};
     let updateUser = false;
     let updateNet = false;
@@ -126,6 +122,9 @@ export class App extends Store<AppState> {
       const { net_id: eventNetId, net_view: netView, message } = event;
       if (!eventNetId) {
         updateUser = true;
+        if (net_id) {
+          updateNet = false;
+        }
         break;
       }
       if (net_id === eventNetId || !netView) updateNet = true;
@@ -143,7 +142,6 @@ export class App extends Store<AppState> {
       await this.onNewUser().catch(console.log);
     }
     if (updateNet) await this.net.enter(net_id!).catch(console.log);
-    // this.emit('events', this.userEvents.getEvents());
   }
 
   setMessage<T extends T.MessageTypeKeys>(messageData: T.IMessage<T>) {
@@ -152,7 +150,5 @@ export class App extends Store<AppState> {
     if (this.userEvents.isEventMessage(messageData)) {
       return this.userEvents.newEventMessage(messageData);
     }
-
-    // this.chat.setMessage(messageData);
   }
 }

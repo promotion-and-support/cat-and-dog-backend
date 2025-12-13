@@ -84,12 +84,12 @@ const config: IConfig = {
       mailService: mailConfig,
     },
     tasks: [
-      // {
-      //   path: 'subscription/sending',
-      //   params: {},
-      //   interval: (restEnv.NOTIFICATION_INTERVAL / 2) * 1000,
-      //   time: 0,
-      // },
+      {
+        path: 'subscription/sending',
+        params: {},
+        interval: (restEnv.NOTIFICATION_INTERVAL / 2) * 1000,
+        time: 0,
+      },
     ],
   },
   inConnection: {
@@ -107,7 +107,7 @@ const config: IConfig = {
     ws: {
       path: resolvePath('server/ws/ws'),
       modulesPath: resolvePath('server/ws/modules'),
-      resModules: ['sendResponse'],
+      resModules: ['sendResponse', 'sendChatMessage'],
     },
     link: {
       path: resolvePath('server/link/link'),

@@ -62,6 +62,11 @@ export class NetArrange {
     logger.debug('CREATE MESSAGES');
     await event.messages.create(t);
 
+    // /* unset admin */
+    // if (!parent_node_id) {
+    //   await t.execQuery.role.removeAdmin([]);
+    // }
+
     return [parent_node_id, node_id];
   }
 
@@ -157,6 +162,12 @@ export class NetArrange {
     const [tightenMember] = await t.execQuery.member.get([childNodeId]);
     const tightenEvent = event.createChild('TIGHTEN', tightenMember!);
     await tightenEvent.messages.create(t);
+
+    // /* set admin */
+    // if (!parent_node_id) {
+    //   await t.execQuery.role.setAdmin([tightenMember!.user_id]);
+    // }
+
     return nodeIds;
   }
 
@@ -214,6 +225,15 @@ export class NetArrange {
     if (!isVoted) return false;
     const { node_id } = memberWithMaxVotes!;
     await this.voteNetUser(event, node_id, parent_node_id);
+
+    // /* set admin */
+    // const { t } = this;
+    // const [voteMember] = await t.execQuery.member.get([parent_node_id]);
+    // if (!voteMember!.parent_node_id) {
+    //   // check if root net
+    //   await t.execQuery.role.setAdmin([voteMember!.user_id]);
+    // }
+
     return true;
   }
 
@@ -221,7 +241,7 @@ export class NetArrange {
     const { t } = this;
     const [vote_member] = await t.execQuery.member.get([node_id]);
     const [disvote_member] = await t.execQuery.member.get([parent_node_id]);
-    const { user_id, count_of_members } = vote_member!;
+    const { user_id, net_id, count_of_members } = vote_member!;
     const { user_id: parentUserId } = disvote_member || {};
 
     /* vote */
@@ -234,9 +254,9 @@ export class NetArrange {
     /* remove member_to_member data in tree */
     await t.execQuery.member.data.removeFromTree([node_id]);
     /* remove all events in net*/
-    // await t.execQuery.events.removeFromNet([user_id!, net_id]);
+    await t.execQuery.events.removeFromNet([user_id!, net_id]);
     /* create messages */
-    // await eventVote.messages.create(t);
+    await eventVote.messages.create(t);
 
     /* disvote */
     if (parentUserId) {
@@ -252,12 +272,12 @@ export class NetArrange {
         parent_node_id,
       ]);
       /* remove all events in net*/
-      // await t.execQuery.events.removeFromNet([parentUserId, net_id]);
+      await t.execQuery.events.removeFromNet([parentUserId, net_id]);
       /* create messages */
-      // await eventDisvote.messages.create(t);
+      await eventDisvote.messages.create(t);
     }
 
-    /* remove all votes*/
+    /* remove all votes */
     await t.execQuery.member.data.clearVotes([parent_node_id]);
     /* replace member_to_member data */
     if (!parentUserId) {

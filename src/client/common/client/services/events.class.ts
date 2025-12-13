@@ -17,6 +17,11 @@ export class EventService extends Store<EventServiceState> {
     this.netEventsMap.set(0, new EventStore(0));
   }
 
+  reset() {
+    this.clear();
+    this.netEventsMap.set(0, new EventStore(0));
+  }
+
   private onAllNets(nets: T.INetsResponse) {
     for (const net of nets) {
       const { net_id, parent_net_id } = net;

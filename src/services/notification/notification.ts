@@ -148,11 +148,11 @@ export class NotificationService {
   }
 
   private async sendToTelegram(user: ITableUsers, message?: string) {
-    const [userEvents] = await execQuery.user.events.get([user.user_id]);
-    const prevNotifDateStr = userEvents?.notification_date || 0;
-    const prevNotifDate = new Date(prevNotifDateStr).getTime();
-    const curDate = new Date().getTime();
-    if (prevNotifDate < curDate - this.tgInterval) return;
+    // const [userEvents] = await execQuery.user.events.get([user.user_id]);
+    // const prevNotifDateStr = userEvents?.notification_date || 0;
+    // const prevNotifDate = new Date(prevNotifDateStr).getTime();
+    // const curDate = new Date().getTime();
+    // if (prevNotifDate < curDate - this.tgInterval) return;
     this.tgStream1.push({ user, message });
   }
 
@@ -183,12 +183,13 @@ export class NotificationService {
     from_node_id: number | null,
     messageText: string,
   ) {
-    const prevNotifDate = new Date().getTime() - this.tgInterval;
-    const prevNotifDateStr = new Date(prevNotifDate).toUTCString();
+    // const prevNotifDate = new Date().getTime() - this.tgInterval;
+    // const prevNotifDateStr = new Date(prevNotifDate).toUTCString();
     const users = await execQuery.net.users.toNotifyOnTg([
       net_id,
       from_node_id,
-      prevNotifDateStr,
+      // prevNotifDateStr,
+      new Date().toUTCString(),
     ]);
 
     const message: T.INewEventsMessage = { type: 'NEW_EVENTS' };
