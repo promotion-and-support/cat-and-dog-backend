@@ -77,10 +77,14 @@ const prepareFile = async (
 ): Promise<IPreparedFile> => {
   let filePath = path.join(staticPath, pathname || INDEX);
   let found = false;
-  const ext = path
+  let ext = path
     .extname(filePath)
     .substring(1)
     .toLowerCase() as ResMimeTypeKeys;
+  if (!ext) {
+    filePath = INDEX;
+    ext = path.extname(filePath).substring(1).toLowerCase() as ResMimeTypeKeys;
+  }
   const notTraversal = filePath.startsWith(staticPath);
   try {
     if (!notTraversal) throw new ServerError('NOT_FOUND');
