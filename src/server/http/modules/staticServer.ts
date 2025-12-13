@@ -81,10 +81,12 @@ const prepareFile = async (
     .extname(filePath)
     .substring(1)
     .toLowerCase() as ResMimeTypeKeys;
+  console.log('ext', { ext, pathname });
   if (!ext) {
-    filePath = INDEX;
+    filePath = path.join(staticPath, INDEX);
     ext = path.extname(filePath).substring(1).toLowerCase() as ResMimeTypeKeys;
   }
+  console.log('ext', { ext, pathname });
   const notTraversal = filePath.startsWith(staticPath);
   try {
     if (!notTraversal) throw new ServerError('NOT_FOUND');
