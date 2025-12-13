@@ -69,10 +69,11 @@ class TgConnection implements IInputConnection {
     const { operation, url } = getOparation(ctx, this.origin) || {};
 
     if (url) {
+      console.log(url);
       const inlineKyeboard = new InlineKeyboard([
         [{ text: url, web_app: { url } }],
       ]);
-      return ctx.reply('Натисніть на лінк нижче', {
+      return ctx.reply(`Натисніть на лінк ${url}`, {
         reply_markup: inlineKyeboard,
       });
     }
