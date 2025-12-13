@@ -39,7 +39,7 @@ export class EventStore extends Store<INetEvents> {
   }
 
   removeEvent(event: T.IEvent) {
-    const events = this.state.events.filter((v) => event !== v);
+    const events = this.state.events.filter((v) => event.event_id !== v.event_id);
     this.setState({ events });
   }
 
