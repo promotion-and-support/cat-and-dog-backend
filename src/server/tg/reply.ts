@@ -4,9 +4,9 @@ import { Context, InlineKeyboard } from 'grammy';
 
 const origin = env.ORIGIN || 'https://example.com';
 const contacts = new URL(origin);
-contacts.hash = '/contacts';
+contacts.pathname = '/contacts';
 const help = new URL(origin);
-help.hash = '/help';
+help.pathname = '/help';
 
 export const greeting = (ctx: Context) => {
   if (env.DEV === 'true') {
@@ -22,10 +22,12 @@ export const greeting = (ctx: Context) => {
   // `;
 
   const text = `
-Цей інструмент створено для спільноти, мета якої -
-'Створити всі необхідні умови та можливості для
-творчості кожної особистості'.
+Цей інструмент створено для спільноти, мета якої:
+
+'Створити всі необхідні умови та можливості для творчості кожної особистості'.
+
 Ви зможете отримувати повідомлення про поточний стан справ та потреби.
+
 Щоб обрати зручний варіант підписки - натисність <b>OPEN</b>.
 `;
 

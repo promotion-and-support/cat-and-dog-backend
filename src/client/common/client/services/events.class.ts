@@ -19,6 +19,7 @@ export class EventService extends Store<EventServiceState> {
 
   reset() {
     this.clear();
+    this.netEventsMap = new Map<number, EventStore>();
     this.netEventsMap.set(0, new EventStore(0));
   }
 
@@ -53,7 +54,7 @@ export class EventService extends Store<EventServiceState> {
       eventStore.addEvents([event]);
     }
     this.setLastEventId(newEvents);
-    await this.app.onNewEvents(netEvents);
+    await this.app.onNewEvents(newEvents);
     this.setState({ netEvents });
   }
 
@@ -128,6 +129,6 @@ export class EventService extends Store<EventServiceState> {
   }
 
   drop(event: T.IEvent) {
-    this.$state.netEvents = this.$state.netEvents.filter((i) => i !== event);
+    this.$state.netEvents = this.$state.netEvents.filter((i) => i.event_id !== event.event_id);
   }
 }
