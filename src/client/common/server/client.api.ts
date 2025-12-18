@@ -123,6 +123,9 @@ export const getApi = (
     'getTree': (options: P.INetReadParams) =>
       fetch<P.INetViewResponse>('/net/getTree', options),
 
+    'invite': (options: Q.TNetInvite) =>
+      fetch<Q.TNetInviteResponse>('/net/invite', options),
+
     'leave': (options: P.INetReadParams) =>
       fetch<boolean>('/net/leave', options),
 

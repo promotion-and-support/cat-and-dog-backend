@@ -17,7 +17,7 @@ export class Member extends Store {
     return this.member;
   }
 
-  async inviteCreate(args: Pick<T.IMemberInviteParams, 'member_name'>) {
+  async createInvite(args: Pick<T.IMemberInviteParams, 'member_name'>) {
     try {
       const { userNet: net } = this.net.state;
       const token = await this.app.api.member.invite.create({

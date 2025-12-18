@@ -16,6 +16,11 @@ export type TEventsConfirm = {
 };
 export type TMemberDataVoteSetResponse = boolean | null;
 export type TMemberInviteCreateResponse = string | null;
+export type TNetInvite = {
+  node_id: number;
+  user_id: number;
+};
+export type TNetInviteResponse = string | null;
 export type TSubscriptionRemove = {
   subject: string | null;
 };

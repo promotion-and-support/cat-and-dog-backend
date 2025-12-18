@@ -4,6 +4,7 @@ import { TQuery } from '../../types/types';
 
 export interface IQueriesNetWait {
   get: TQuery<[['net_id', number]], INetWaiting>;
+  getByUser: TQuery<[['net_id', number], ['user_id', number]], INetWaiting>;
   create: TQuery<
     [['net_id', number], ['user_id', number], ['comment', string]],
     ITableNets
@@ -13,12 +14,26 @@ export interface IQueriesNetWait {
 
 export const get = `
   SELECT
+    users.user_id,
     users.name,
     nets_guests.comment
   FROM nets_guests
   INNER JOIN users ON
     users.user_id = nets_guests.user_id
   WHERE net_id = $1
+`;
+
+export const getByUser = `
+  SELECT
+    users.user_id,
+    users.name,
+    nets_guests.comment
+  FROM nets_guests
+  INNER JOIN users ON
+    users.user_id = nets_guests.user_id
+  WHERE
+    net_id = $1 AND
+    users.user_id = $2
 `;
 
 export const create = `

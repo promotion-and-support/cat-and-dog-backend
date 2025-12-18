@@ -8,6 +8,7 @@ export interface IQueriesNetTree {
   getData: TQuery<[['parent_node_id', number]], IMemberResponse>;
   getNodes: TQuery<[['parent_node_id', number]], ITableNodes>;
   getMembers: TQuery<[['parent_node_id', number]], IMember>;
+  getEmptyNodes: TQuery<[['parent_node_id', number]], ITableNodes>;
 }
 
 export const getData = `
@@ -53,4 +54,16 @@ export const getMembers = `
   INNER JOIN members ON
     members.member_id = nodes.node_id
   WHERE nodes.parent_node_id = $1
+`;
+
+export const getEmptyNodes = `
+  SELECT nodes.*
+  FROM nodes
+  LEFT JOIN members_invites ON
+    members_invites.node_id = nodes.node_id
+  WHERE
+    parent_node_id = $1 AND
+    count_of_members = 0 AND
+    members_invites.node_id ISNULL
+  ORDER BY node_position
 `;

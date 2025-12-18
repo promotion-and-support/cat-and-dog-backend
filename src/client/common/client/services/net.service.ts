@@ -192,4 +192,16 @@ export class Net extends Store<NetState> {
       throw e;
     }
   }
+
+  async createInviteWaiting(user_id: number) {
+    const { node_id } = this.state.userNet!;
+    try {
+      const token = await this.app.api.net.invite({ node_id, user_id });
+      await this.getTree();
+      return token;
+    } catch (e: any) {
+      this.setError(e);
+      throw e;
+    }
+  }
 }

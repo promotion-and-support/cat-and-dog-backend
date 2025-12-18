@@ -81,6 +81,7 @@ export const WaitNetsSchema = {
 } as Record<keyof IWaitNets[number], TJoiSchema>;
 
 export const NetWaitingResponseSchema = {
+  user_id: Joi.number(),
   name: Joi.string(),
   comment: Joi.string(),
 } as Record<keyof INetWaiting, TJoiSchema>;
