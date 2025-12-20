@@ -31,5 +31,9 @@ export interface IConnectionService {
     data: IMessage<T>,
     connectionIds?: Set<number>,
   ) => Promise<boolean>;
-  sendNotification: (chatId: string, message?: string) => Promise<boolean>;
+  sendNotification: (
+    chatId: string,
+    message?: string,
+    other?: Record<string, any>,
+  ) => Promise<boolean>;
 }

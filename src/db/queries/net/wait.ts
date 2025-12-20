@@ -27,6 +27,7 @@ export const getByUser = `
   SELECT
     users.user_id,
     users.name,
+    users.chat_id,
     nets_guests.comment
   FROM nets_guests
   INNER JOIN users ON

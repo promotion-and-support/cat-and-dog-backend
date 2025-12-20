@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { InlineKeyboard } from 'grammy';
 import { JOI_NULL } from '../../controller/constants';
 import { THandler } from '../../controller/types';
 import { INetInviteParams } from '../../client/common/server/types/types';
@@ -16,7 +17,7 @@ const create: THandler<INetInviteParams, string | null> = async (
 
   const result = exeWithNetLock(net_id, async () => {
     const [waiting] = await execQuery.net.wait.getByUser([net_id, user_id]);
-    if (!waiting) return null; // bad request
+    if (!waiting?.chat_id) return null; // bad request
 
     await m!.reinit();
 
@@ -34,10 +35,14 @@ const create: THandler<INetInviteParams, string | null> = async (
       token,
     ]);
 
+    /* if result send to tg */
+    const message = 'Запрошення до спільноти';
+    const url = `${env.ORIGIN}/net/invite/${token}`;
+    const reply_markup = new InlineKeyboard().url('Приєднатись', url);
+    notificationService.sendToTelegram(waiting, message, { reply_markup });
+
     return token;
   });
-
-  /* if result send to tg */
 
   return result;
 };

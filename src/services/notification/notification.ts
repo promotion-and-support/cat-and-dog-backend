@@ -17,7 +17,11 @@ export class NotificationService {
   private emailInterval: number;
   private messageStream: Readable & AsyncIterable<IMeesageStream>;
   private tgStream1: Readable &
-    AsyncIterable<{ user: ITableUsers; message?: string }>;
+    AsyncIterable<{
+      user: ITableUsers;
+      message?: string;
+      other?: Record<string, any>;
+    }>;
   private tgStream: Readable &
     AsyncIterable<{ user: ITableUsers; message: ITableMessages }>;
   private mailStream: Readable & AsyncIterable<ITableUsers>;
@@ -61,11 +65,11 @@ export class NotificationService {
   }
 
   private async sendingToTelegram1() {
-    for await (const { user, message } of this.tgStream1) {
+    for await (const { user, message, other } of this.tgStream1) {
       const { user_id, chat_id } = user;
       // logger.warn('SEND TO TELEGRAM', user_id);
       const date = new Date().toUTCString();
-      const success = await this.tg!.sendNotification(chat_id!, message);
+      const success = await this.tg!.sendNotification(chat_id!, message, other);
       if (success) {
         await execQuery.user.events
           .write([user_id, date])
@@ -147,13 +151,17 @@ export class NotificationService {
     else this.sendToEmail(user!);
   }
 
-  private async sendToTelegram(user: ITableUsers, message?: string) {
+  async sendToTelegram(
+    user: Pick<ITableUsers, 'user_id' | 'chat_id'>,
+    message?: string,
+    other?: Record<string, any>,
+  ) {
     // const [userEvents] = await execQuery.user.events.get([user.user_id]);
     // const prevNotifDateStr = userEvents?.notification_date || 0;
     // const prevNotifDate = new Date(prevNotifDateStr).getTime();
     // const curDate = new Date().getTime();
     // if (prevNotifDate < curDate - this.tgInterval) return;
-    this.tgStream1.push({ user, message });
+    this.tgStream1.push({ user, message, other });
   }
 
   private async sendToEmail(user: ITableUsers) {

@@ -72,7 +72,7 @@ class TgConnection implements IInputConnection {
       const inlineKyeboard = new InlineKeyboard([
         [{ text: 'OPEN', web_app: { url } }],
       ]);
-      return ctx.reply(`Для завершення дії натисніть OPEN`, {
+      return ctx.reply('Для завершення дії натисніть OPEN', {
         reply_markup: inlineKyeboard,
       });
     }
@@ -94,10 +94,17 @@ class TgConnection implements IInputConnection {
     greeting(ctx);
   }
 
-  private async sendNotification(chatId: string, text?: string) {
-    if (text) {
+  private async sendNotification(
+    chatId: string,
+    text = '',
+    other: Record<string, any> = {},
+  ) {
+    if (text || Object.keys(other).length) {
       try {
-        await this.server.api.sendMessage(chatId, text, { parse_mode: 'HTML' });
+        await this.server.api.sendMessage(chatId, text, {
+          parse_mode: 'HTML',
+          ...other,
+        });
         return true;
       } catch (e) {
         logger.warn(e);
