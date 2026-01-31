@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { TQuery } from '../../types/types';
 
 export interface IQueriesMemberData {

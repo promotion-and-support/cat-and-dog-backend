@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { TQuery } from '../../../types/types';
 import { INetMember } from '../../../../domain/types/member.types';
 

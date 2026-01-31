@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { THandler } from '../../controller/types';
 import {
   IUserResponse,
-  UserStatusKeys,
+  UserStatusKey,
 } from '../../client/common/server/types/types';
 import { UserResponseSchema } from '../schema/schema';
 
@@ -18,13 +18,13 @@ const login_tg: THandler<{ initData: string }, IUserResponse> = async (
   if (!user) return null;
 
   const { user_id, confirmed } = user;
-  const user_status: UserStatusKeys = confirmed ? 'LOGGEDIN' : 'NOT_CONFIRMED';
+  const user_status: UserStatusKey = confirmed ? 'LOGGED_IN' : 'NOT_CONFIRMED';
   session.write('user_id', user_id);
   session.write('user_status', user_status);
   return { ...user, user_status };
 };
 login_tg.paramsSchema = { initData: Joi.string().required() };
 login_tg.responseSchema = UserResponseSchema;
-login_tg.allowedForUser = 'NOT_LOGGEDIN';
+login_tg.allowedForUser = 'NOT_LOGGED_IN';
 
 export = login_tg;

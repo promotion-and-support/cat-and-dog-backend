@@ -1,19 +1,24 @@
 import {
   ITableUsers,
   ITableMembersInvites,
-  OuterJoin,
   ITableMembersToMembers,
   ITableMembers,
   ITableNodes,
+  OuterJoin,
 } from '../../../local/imports';
 
-export type IMemberInviteParams = {
+export type IUserNode = {
   node_id: number;
-  member_node_id: number;
-  member_name: string;
 };
 
-export type IMemberConfirmParams = Omit<IMemberInviteParams, 'member_name'>;
+export type IMemberNode = {
+  member_id: number;
+};
+
+export type IMemberConfirmParams = IUserNode & IMemberNode;
+export type IMemberInviteParams = IMemberConfirmParams & {
+  member_name: string;
+};
 
 export type IMemberResponse = Pick<
   ITableNodes,

@@ -7,16 +7,13 @@ import { getMemberStatus } from '../../../client/common/server/utils';
 
 const cancel: THandler<IMemberConfirmParams, boolean> = async (
   _,
-  { node_id, member_node_id },
+  { node_id, member_id },
 ) => {
-  const [member] = await execQuery.member.find.inTree([
-    node_id,
-    member_node_id,
-  ]);
+  const [member] = await execQuery.member.find.inTree([node_id, member_id]);
   if (!member) return false; // bad request
   const memberStatus = getMemberStatus(member);
   if (memberStatus !== 'INVITED') return false; // bad request
-  await execQuery.member.invite.remove([member_node_id]);
+  await execQuery.member.invite.remove([member_id]);
   return true;
 };
 cancel.paramsSchema = MemberConfirmParamsSchema;

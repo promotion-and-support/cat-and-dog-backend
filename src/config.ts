@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { resolve } from 'node:path';
 import { IConfig } from './types/config.types';
 import { BUILD_SRC_PATH } from './constants/constants';

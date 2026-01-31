@@ -1,4 +1,5 @@
 import * as T from './db.types';
+import { OuterJoin } from './util.types';
 
 export type IMember = T.ITableNodes & T.ITableMembers;
 export type IMemberNode = T.ITableNodes;
@@ -16,7 +17,7 @@ export type IBranchVotes = Pick<T.ITableNodes, 'node_id'> & {
 
 /* net structure */
 export type INetMember = T.ITableNodes &
-  T.OuterJoin<T.ITableMembers> & {
+  OuterJoin<T.ITableMembers> & {
     invite: boolean;
     dislikes: number;
     votes: number;

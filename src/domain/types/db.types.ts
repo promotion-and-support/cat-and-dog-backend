@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 export const TABLES_MAP = {
   USERS: 'users',
   USERS_TOKENS: 'users_tokens',
@@ -18,16 +17,14 @@ export const TABLES_MAP = {
   USERS_EVENTS: 'users_events',
 };
 
-export type OuterJoin<T> = { [key in keyof T]: T[key] | null };
-
 export type ITableUsers = {
   user_id: number;
   email: string | null;
   name: string | null;
   mobile: string | null;
-  password: string | null;
   confirmed: boolean;
   chat_id: string | null;
+  password: string | null;
 };
 
 export type ITableUsersTokens = {
@@ -82,7 +79,7 @@ export type ITableNets = {
   net_id: number;
   net_level: number;
   parent_net_id: number | null;
-  root_net_id: number; // | null
+  root_net_id: number; // initialy null
   count_of_nets: number;
   blocked: boolean;
 };
@@ -130,7 +127,7 @@ export type ITableEvents = {
   event_id: number;
   user_id: number;
   net_id: number | null;
-  net_view: 'net' | 'tree' | 'circle' | null /* NetViewKeys */;
+  net_view: string | null /* NetViewKeys */;
   from_node_id: number | null;
   event_type: string /* NetEventKeys */;
   message: string;

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { format } from 'node:util';
 import {
   IEventRecord,

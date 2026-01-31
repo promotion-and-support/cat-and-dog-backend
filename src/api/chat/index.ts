@@ -48,4 +48,4 @@ export const removeConnection: THandler<never, boolean> = async ({
   return true;
 };
 removeConnection.responseSchema = Joi.boolean();
-removeConnection.allowedForUser = 'NOT_LOGGEDIN';
+removeConnection.allowedForUser = 'NOT_LOGGED_IN';

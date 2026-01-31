@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Server } from 'ws';
 import { IInputConnection, IRequest } from '../types';
 import { IWsConfig, IWsConnection, IWsServer, TWsResModule } from './types';

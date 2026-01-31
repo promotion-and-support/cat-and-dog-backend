@@ -1,16 +1,16 @@
+import { ITableUsers } from '../../../local/imports';
+
 export const USER_STATUS_MAP = {
-  NOT_LOGGEDIN: 0,
+  NOT_LOGGED_IN: 0,
   NOT_CONFIRMED: 1,
-  LOGGEDIN: 2,
-  // 'WAITING': 3,
+  LOGGED_IN: 2,
+  /* 'WAITING': 3, */
   INVITING: 3,
   INSIDE_NET: 4,
   DEV: Infinity,
 };
-export type UserStatusKeys = keyof typeof USER_STATUS_MAP;
-export type PartialUserStatusKeys = Extract<
-  UserStatusKeys,
-  'NOT_LOGGEDIN' | 'NOT_CONFIRMED'
->;
-export type PartialUserNetStatusKeys = Extract<UserStatusKeys, 'INVITING'>;
-export const loggedInState = USER_STATUS_MAP.LOGGEDIN;
+export type UserStatusKey = keyof typeof USER_STATUS_MAP;
+
+export type IUser = Omit<ITableUsers, 'password'> & {
+  user_status: UserStatusKey;
+};

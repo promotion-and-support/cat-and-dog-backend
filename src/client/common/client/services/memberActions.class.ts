@@ -17,12 +17,12 @@ export class MemberActions extends Store {
     return name || memberName || `Учасник ${position}`;
   }
 
-  async setDislike(member_node_id: number) {
+  async setDislike(member_id: number) {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.data.dislike.set({
         ...net!,
-        member_node_id,
+        member_id,
       });
       success && (await this.net.onMemberChanged());
       return success;
@@ -31,12 +31,12 @@ export class MemberActions extends Store {
     }
   }
 
-  async unsetDislike(member_node_id: number) {
+  async unsetDislike(member_id: number) {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.data.dislike.unSet({
         ...net!,
-        member_node_id,
+        member_id,
       });
       success && (await this.net.onMemberChanged());
       return success;
@@ -45,12 +45,12 @@ export class MemberActions extends Store {
     }
   }
 
-  async setVote(member_node_id: number) {
+  async setVote(member_id: number) {
     try {
       const { userNet: net } = this.app.getState();
       const voted = await this.app.api.member.data.vote.set({
         ...net!,
-        member_node_id,
+        member_id,
       });
       if (voted === false) {
         await this.net.onMemberChanged();
@@ -62,15 +62,15 @@ export class MemberActions extends Store {
     }
   }
 
-  async unsetVote(member_node_id: number) {
+  async unsetVote(member_id: number) {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.data.vote.unSet({
         ...net!,
-        member_node_id,
+        member_id,
       });
       if (success) {
-        if (member_node_id === net?.node_id) await this.net.onUserNetDataChanged();
+        if (member_id === net?.node_id) await this.net.onUserNetDataChanged();
         else await this.net.onMemberChanged();
       }
       return success;

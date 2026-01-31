@@ -5,11 +5,11 @@ import {
   ITableNets,
   ITableNetsData,
   ITableNodes,
-  OuterJoin,
   ITableNetsGuests,
   ITableUsers,
+  OuterJoin,
 } from '../../../local/imports';
-import { IMemberResponse } from './member.types';
+import { IMemberResponse, IUserNode } from './member.types';
 
 export type INetCreateParams = Pick<ITableNetsData, 'name'> & {
   node_id: number | null;
@@ -17,20 +17,9 @@ export type INetCreateParams = Pick<ITableNetsData, 'name'> & {
 
 export type INetEnterParams = { net_id: number };
 
-export type INetReadParams = { node_id: number };
+export type INetUpdateParams = IUserNode & { goal: string };
 
-export type INetUpdateParams = {
-  goal: string;
-  node_id: number;
-};
-
-export type INetResponse =
-  | null
-  | (Pick<ITableNets, 'net_id' | 'parent_net_id' | 'net_level'> &
-      Pick<ITableNetsData, 'name' | 'goal' | 'net_link'> &
-      Pick<ITableNodes, 'node_id' | 'parent_node_id'> & {
-        total_count_of_members: number;
-      });
+export type INetResponse = (ITableNets & ITableNetsData & ITableNodes) | null;
 
 export type INetsResponse = (ITableNets &
   Pick<ITableNetsData, 'name'> &

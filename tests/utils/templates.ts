@@ -1,6 +1,6 @@
 import { format } from 'node:util';
 
-const tplHeader = `/* eslint-disable max-lines */
+const tplHeader = `
 /* eslint-disable max-len */
 import { TTestUnit } from './types';
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { mock } from 'node:test';
 import { IConfig } from '../../src/types/config.types';
 import { TTransport } from '../../src/server/types';

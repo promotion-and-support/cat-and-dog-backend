@@ -7,7 +7,6 @@ export type TAccountLogin_tg = {
 export type TAccountSignup_tg = {
   initData: string;
 };
-export type TAccountMessengerLinkGetResponse = string | null;
 export type TEventsRead = {
   event_id?: number;
 };

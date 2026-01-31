@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+
 /* eslint-disable max-len */
 import * as P from './types/types';
 import * as Q from './types/client.api.types';
@@ -17,24 +17,15 @@ export const getApi = (
     'confirm': (options: P.ITokenParams) =>
       fetch<P.IUserResponse>('/account/confirm', options),
 
-    'login': (options: P.ILoginParams) =>
-      fetch<P.IUserResponse>('/account/login', options),
-
     'login_tg': (options: Q.TAccountLogin_tg) =>
       fetch<P.IUserResponse>('/account/login_tg', options),
 
     'logout': () => fetch<boolean>('/account/logout'),
 
-    'overmail': (options: P.IEnterParams) =>
-      fetch<boolean>('/account/overmail', options),
-
     'remove': () => fetch<boolean>('/account/remove'),
 
     'restore': (options: P.ITokenParams) =>
       fetch<P.IUserResponse>('/account/restore', options),
-
-    'signup': (options: P.ISignupParams) =>
-      fetch<P.IUserResponse>('/account/signup', options),
 
     'signup_tg': (options: Q.TAccountSignup_tg) =>
       fetch<P.IUserResponse>('/account/signup_tg', options),
@@ -42,13 +33,6 @@ export const getApi = (
     'messenger': {
       'get': {
         'name': () => fetch<string>('/account/messenger/get/name'),
-
-      },
-      'link': {
-        'get': () => fetch<Q.TAccountMessengerLinkGetResponse>('/account/messenger/link/get'),
-
-        'connect': (options: P.IMessengerLinkConnectParams) =>
-          fetch<boolean>('/account/messenger/link/connect', options),
 
       },
     },
@@ -117,16 +101,16 @@ export const getApi = (
     'enter': (options: P.INetEnterParams) =>
       fetch<P.INetResponse>('/net/enter', options),
 
-    'getCircle': (options: P.INetReadParams) =>
+    'getCircle': (options: P.IUserNode) =>
       fetch<P.INetViewResponse>('/net/getCircle', options),
 
-    'getTree': (options: P.INetReadParams) =>
+    'getTree': (options: P.IUserNode) =>
       fetch<P.INetViewResponse>('/net/getTree', options),
 
     'invite': (options: Q.TNetInvite) =>
       fetch<Q.TNetInviteResponse>('/net/invite', options),
 
-    'leave': (options: P.INetReadParams) =>
+    'leave': (options: P.IUserNode) =>
       fetch<boolean>('/net/leave', options),
 
     'update': (options: P.INetUpdateParams) =>
@@ -139,7 +123,7 @@ export const getApi = (
       'remove': (options: P.INetEnterParams) =>
         fetch<boolean>('/net/wait/remove', options),
 
-      'get': (options: P.INetReadParams) =>
+      'get': (options: P.IUserNode) =>
         fetch<P.INetWaitingResponse>('/net/wait/get', options),
 
     },

@@ -8,22 +8,19 @@ import { getMemberStatus } from '../../../client/common/server/utils';
 
 const confirm: THandler<IMemberConfirmParams, boolean> = async (
   { member: m },
-  { node_id, member_node_id },
+  { node_id, member_id },
 ) => {
   const { net_id } = m!.get();
   let event!: NetEvent;
   const result = await domain.utils.exeWithNetLock(net_id, async (t) => {
     await m!.reinit();
-    const [member] = await execQuery.member.find.inTree([
-      node_id,
-      member_node_id,
-    ]);
+    const [member] = await execQuery.member.find.inTree([node_id, member_id]);
     if (!member) return false; // bad request
     const memberStatus = getMemberStatus(member);
     if (memberStatus !== 'CONNECTED') return false; // bad request
-    await t.execQuery.member.confirm([member_node_id]);
+    await t.execQuery.member.confirm([member_id]);
     const net = new domain.net.NetArrange(t);
-    await net.updateCountOfMembers(member_node_id);
+    await net.updateCountOfMembers(member_id);
     await domain.net.createTree(t, member);
 
     event = new domain.event.NetEvent(net_id, 'CONFIRM', member);

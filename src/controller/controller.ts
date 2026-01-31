@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { setTimeout, setInterval } from 'node:timers';
 import {
   THandler,

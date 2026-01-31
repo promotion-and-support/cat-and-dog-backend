@@ -2,7 +2,7 @@ import { THandler } from '../../controller/types';
 import {
   ITokenParams,
   IUserResponse,
-  UserStatusKeys,
+  UserStatusKey,
 } from '../../client/common/server/types/types';
 import { TokenParamsSchema, UserResponseSchema } from '../schema/schema';
 
@@ -15,13 +15,13 @@ const confirm: THandler<ITokenParams, IUserResponse> = async (
   const { user_id, confirmed } = user;
   await execQuery.user.token.remove([user_id]);
   !confirmed && (await execQuery.user.confirm([user_id]));
-  const user_status: UserStatusKeys = 'LOGGEDIN';
+  const user_status: UserStatusKey = 'LOGGED_IN';
   session.write('user_id', user_id);
   session.write('user_status', user_status);
   return { ...user, user_status };
 };
 confirm.paramsSchema = TokenParamsSchema;
 confirm.responseSchema = UserResponseSchema;
-confirm.allowedForUser = 'NOT_LOGGEDIN';
+confirm.allowedForUser = 'NOT_LOGGED_IN';
 
 export = confirm;

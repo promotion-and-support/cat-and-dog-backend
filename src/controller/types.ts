@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import Joi, { ObjectSchema } from 'joi';
 import { IObject } from '../types/types';
 import {
@@ -7,11 +6,7 @@ import {
   IParams,
 } from '../types/operation.types';
 import { ITableUsers } from '../domain/types/db.types';
-import {
-  PartialUserNetStatusKeys,
-  PartialUserStatusKeys,
-  UserStatusKeys,
-} from '../client/common/server/types/types';
+import { UserStatusKey } from '../client/common/server/types/types';
 import { IMailService } from '../services/mail/types';
 import { ChatService } from '../services/chat/chat';
 import { NotificationService } from '../services/notification/notification';
@@ -69,8 +64,8 @@ export type THandler<
     : Q extends Array<IObject>
       ? TObjectSchema<Q[number]>
       : TJoiSchema;
-  allowedForUser?: PartialUserStatusKeys;
-  allowedForNetUser?: PartialUserNetStatusKeys;
+  allowedForUser?: 'NOT_LOGGED_IN' | 'NOT_CONFIRMED';
+  allowedForNetUser?: 'INVITING';
   checkNet?: boolean;
 };
 
@@ -91,7 +86,7 @@ export type IContext = {
 
 export type ISessionContent = Partial<{
   user_id: ITableUsers['user_id'];
-  user_status: UserStatusKeys;
+  user_status: UserStatusKey;
 }>;
 
 export interface IServices {

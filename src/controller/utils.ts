@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Writable } from 'node:stream';
 import Joi from 'joi';
 import { IEndpoints, TJoiSchema, THandler, THandlerSchema } from './types';

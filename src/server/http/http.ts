@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { createServer } from 'node:http';
 import { Readable } from 'node:stream';
 import { TPromiseExecutor } from '../../../src/client/common/types';

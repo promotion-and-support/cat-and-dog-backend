@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { IControllerContext } from './types';
 import { IConfig } from '../types/config.types';
 import { IOperation } from '../types/operation.types';

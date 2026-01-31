@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { env } from 'node:process';
 import { Bot, BotError, Context, InlineKeyboard } from 'grammy';
 import { THandleOperation } from '../../types/operation.types';

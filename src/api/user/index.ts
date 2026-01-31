@@ -16,7 +16,7 @@ export const read: THandler<never, IUserResponse> = async ({ session }) => {
   return { ...user!, user_status };
 };
 read.responseSchema = UserResponseSchema;
-read.allowedForUser = 'NOT_LOGGEDIN';
+read.allowedForUser = 'NOT_LOGGED_IN';
 
 export const update: THandler<IUserUpdateParams, IUserResponse> = async (
   { session },

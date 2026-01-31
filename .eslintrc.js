@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 module.exports = {
   env: {
     commonjs: true,
@@ -18,7 +17,6 @@ module.exports = {
   ignorePatterns: ['js'],
   root: true,
   rules: {
-    'max-lines': ['error', 100],
     indent: ['error', 2],
     // quotes: ['error', 'single'],
     'block-spacing': ['error', 'always'],
@@ -57,13 +55,6 @@ module.exports = {
             after: false,
           },
         },
-      },
-    ],
-    'max-len': [
-      'error',
-      {
-        code: 80,
-        ignoreUrls: true,
       },
     ],
     'max-nested-callbacks': [

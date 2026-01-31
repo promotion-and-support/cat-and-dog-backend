@@ -1,9 +1,9 @@
 import Joi from 'joi';
-import { INetReadParams } from '../../client/common/server/types/types';
+import { IUserNode } from '../../client/common/server/types/types';
 import { THandler } from '../../controller/types';
-import { NetReadParamsSchema } from '../schema/schema';
+import { UserNodeSchema } from '../schema/schema';
 
-const leave: THandler<INetReadParams> = async ({ member: m }) => {
+const leave: THandler<IUserNode> = async ({ member: m }) => {
   const member = m!.get();
   const { confirmed } = member;
   const event_type = confirmed ? 'LEAVE' : 'LEAVE_CONNECTED';
@@ -11,7 +11,7 @@ const leave: THandler<INetReadParams> = async ({ member: m }) => {
   await remove(event_type, member);
   return true;
 };
-leave.paramsSchema = NetReadParamsSchema;
+leave.paramsSchema = UserNodeSchema;
 leave.responseSchema = Joi.boolean();
 leave.allowedForNetUser = 'INVITING';
 leave.checkNet = true;

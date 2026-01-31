@@ -11,6 +11,7 @@ import {
 } from '../../client/common/server/types/types';
 import { TJoiSchema } from '../../controller/types';
 import { JOI_NULL } from '../../controller/constants';
+import { NodeSchema } from './node.schema';
 
 export const NetCreateParamsSchema = {
   node_id: [Joi.number(), JOI_NULL],
@@ -19,24 +20,34 @@ export const NetCreateParamsSchema = {
 
 export const NetEnterParamsSchema = { net_id: Joi.number().required() };
 
-export const NetReadParamsSchema = { node_id: Joi.number().required() };
-
 export const NetUpdateParamsSchema = {
   node_id: Joi.number(),
   goal: Joi.string(),
 } as Record<keyof INetUpdateParams, TJoiSchema>;
 
+export const NetSchema = {
+  net_id: Joi.number(),
+  net_level: Joi.number(),
+  parent_net_id: [Joi.number(), JOI_NULL],
+  root_net_id: Joi.number(),
+  count_of_nets: Joi.number(),
+  blocked: Joi.boolean(),
+};
+
+export const NetDataSchema = {
+  net_id: Joi.number(),
+  name: Joi.string(),
+  goal: [Joi.string(), JOI_NULL],
+  resource_name: [Joi.string(), JOI_NULL],
+  net_link: [Joi.string(), JOI_NULL],
+};
+
 export const NetResponseSchema = [
   JOI_NULL,
   {
-    net_id: Joi.number(),
-    net_level: Joi.number(),
-    parent_net_id: [Joi.number(), JOI_NULL],
-    name: Joi.string(),
-    goal: [Joi.string(), JOI_NULL],
-    net_link: [Joi.string(), JOI_NULL],
-    node_id: Joi.number(),
-    parent_node_id: [Joi.number(), JOI_NULL],
+    ...NetSchema,
+    ...NetDataSchema,
+    ...NodeSchema,
     total_count_of_members: Joi.number(),
   } as Record<keyof OmitNull<INetResponse>, TJoiSchema>,
 ];

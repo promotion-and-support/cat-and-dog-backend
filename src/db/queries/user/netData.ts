@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { TQuery } from '../../types/types';
 // eslint-disable-next-line max-len
 import { IUserNetDataResponse } from '../../../client/common/server/types/types';

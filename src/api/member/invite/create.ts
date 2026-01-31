@@ -8,16 +8,13 @@ import { exeWithNetLock } from '../../../domain/utils/utils';
 
 const create: THandler<IMemberInviteParams, string | null> = async (
   { member: m },
-  { node_id, member_node_id, member_name },
+  { node_id, member_id, member_name },
 ) => {
   const { goal, net_id } = await m!.getNet();
   if (!goal) return null; // bad request
   return exeWithNetLock(net_id, async () => {
     await m!.reinit();
-    const [member] = await execQuery.member.find.inTree([
-      node_id,
-      member_node_id,
-    ]);
+    const [member] = await execQuery.member.find.inTree([node_id, member_id]);
     if (!member) return null; // bad request
 
     const memberStatus = getMemberStatus(member);
@@ -26,7 +23,7 @@ const create: THandler<IMemberInviteParams, string | null> = async (
     const token = cryptoService.createUnicCode(15);
     await execQuery.member.invite.create([
       node_id,
-      member_node_id,
+      member_id,
       member_name,
       token,
     ]);

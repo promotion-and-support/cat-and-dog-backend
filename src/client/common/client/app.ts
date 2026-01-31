@@ -8,11 +8,11 @@ import { UserNets } from './services/user.nets.class';
 import { EventService } from './services/events.class';
 
 interface AppState {
-  userStatus: T.UserStatusKeys;
+  userStatus: T.UserStatusKey;
 }
 
 const INITIAL_STATE: AppState = {
-  userStatus: 'NOT_LOGGEDIN',
+  userStatus: 'NOT_LOGGED_IN',
 };
 
 export class App extends Store<AppState> {
@@ -58,7 +58,7 @@ export class App extends Store<AppState> {
   private async handleConnect() {
     if (this.status === 'INIT') return;
     const { userStatus } = this.$state;
-    if (userStatus === 'NOT_LOGGEDIN') return;
+    if (userStatus === 'NOT_LOGGED_IN') return;
     await this.api.chat.connect.user().catch((e) => this.setError(e));
     await this.userEvents.read().catch((e) => this.setError(e));
   }
@@ -72,7 +72,7 @@ export class App extends Store<AppState> {
   private setUserStatus() {
     const { user } = this.account.state;
     if (!user) {
-      this.setState({ userStatus: 'NOT_LOGGEDIN' });
+      this.setState({ userStatus: 'NOT_LOGGED_IN' });
       return;
     }
     const { userNet, userNetData } = this.net.state;
@@ -89,7 +89,7 @@ export class App extends Store<AppState> {
     try {
       const { user } = this.account.state;
       if (!user) this.setInitialValues();
-      else if (user.user_status === 'LOGGEDIN') {
+      else if (user.user_status === 'LOGGED_IN') {
         await this.subscription.read();
         await this.userNets.getAllNets();
         await this.userNets.getWaitNets();

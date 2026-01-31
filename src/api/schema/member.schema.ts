@@ -7,7 +7,7 @@ import { TJoiSchema } from '../../controller/types';
 
 export const MemberConfirmParamsSchema = {
   node_id: Joi.number().required(),
-  member_node_id: Joi.number().required(),
+  member_id: Joi.number().required(),
 } as Record<keyof IMemberConfirmParams, TJoiSchema>;
 
 export const MemberInviteParamsSchema = {

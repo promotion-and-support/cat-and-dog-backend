@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { ITableUsers } from '../../../domain/types/db.types';
 import { TQuery } from '../../types/types';
 import { IQueriesUserToken } from './token';

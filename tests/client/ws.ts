@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { WebSocket } from 'ws';
 import {
   IWsResponse,

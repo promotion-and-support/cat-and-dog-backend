@@ -11,3 +11,5 @@ export const UserNetDataResponseSchema = {
   vote: [Joi.boolean(), JOI_NULL],
   vote_count: Joi.number(),
 } as Record<keyof IUserNetDataResponse, TJoiSchema>;
+
+export const UserNodeSchema = { node_id: Joi.number().required() };

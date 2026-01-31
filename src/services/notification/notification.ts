@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Readable } from 'node:stream';
 import * as T from '../../client/common/server/types/types';
 import { IServices } from '../../controller/types';

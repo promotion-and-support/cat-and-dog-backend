@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { NetEventKeys } from '../../client/common/server/types/types';
 import { ITransaction } from '../../db/types/types';
 import { IMember } from '../types/member.types';

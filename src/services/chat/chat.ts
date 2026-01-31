@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 // import * as T from '../../client/common/server/types/types';
 // import { IChatMapValue } from './types';
 // import { IMemberNode } from '../../domain/types/member.types';

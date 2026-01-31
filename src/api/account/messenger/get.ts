@@ -3,4 +3,4 @@ import { THandler } from '../../../controller/types';
 
 export const name: THandler<never, string> = async () => env.TG_BOT || '';
 name.responseSchema = Joi.string();
-name.allowedForUser = 'NOT_LOGGEDIN';
+name.allowedForUser = 'NOT_LOGGED_IN';

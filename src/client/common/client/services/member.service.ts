@@ -22,7 +22,7 @@ export class Member extends Store {
       const { userNet: net } = this.net.state;
       const token = await this.app.api.member.invite.create({
         ...args,
-        member_node_id: this.member.node_id,
+        member_id: this.member.node_id,
         ...net!,
       });
       if (token) await this.net.onMemberChanged();
@@ -36,7 +36,7 @@ export class Member extends Store {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.invite.cancel({
-        member_node_id: this.member.node_id,
+        member_id: this.member.node_id,
         ...net!,
       });
       if (success) await this.net.onMemberChanged();
@@ -50,7 +50,7 @@ export class Member extends Store {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.invite.confirm({
-        member_node_id: this.member.node_id,
+        member_id: this.member.node_id,
         ...net!,
       });
       if (success) await this.net.onMemberChanged();
@@ -66,7 +66,7 @@ export class Member extends Store {
     try {
       const { userNet: net } = this.app.getState();
       const success = await this.app.api.member.invite.refuse({
-        member_node_id: this.member.node_id,
+        member_id: this.member.node_id,
         ...net!,
       });
       if (success) await this.net.onMemberChanged();
