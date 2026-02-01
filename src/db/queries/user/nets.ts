@@ -12,10 +12,7 @@ export const getAll = `
   SELECT
     nets.*,
     nodes.*,
-    nodes.node_id::int,
-    nodes.parent_node_id::int,
-    nets.net_id::int,
-    nets_data.name,
+    nets_data.*,
     members.user_id,
     members.confirmed
   FROM members

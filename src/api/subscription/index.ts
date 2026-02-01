@@ -8,8 +8,8 @@ import {
 import {
   GetSubscriptionSchema,
   UpdateSubscriptionSchema,
-} from '../schema/subscription.schema';
-import { JOI_NULL } from '../../controller/constants';
+  JOI_NULL,
+} from '../schema/schema';
 
 /* read */
 export const get: THandler<never, IGetSubscription> = async ({ session }) => {

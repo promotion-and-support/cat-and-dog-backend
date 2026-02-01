@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { NET_EVENT_MAP } from '../../client/common/server/types/types';
-import { JOI_NULL } from '../../controller/constants';
+import { JOI_NULL } from './index.schema';
 
 export const EventsSchema = {
   event_id: Joi.number(),

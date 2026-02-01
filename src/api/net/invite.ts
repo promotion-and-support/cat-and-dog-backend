@@ -1,9 +1,9 @@
 import Joi from 'joi';
 import { InlineKeyboard } from 'grammy';
-import { JOI_NULL } from '../../controller/constants';
 import { THandler } from '../../controller/types';
 import { INetInviteParams } from '../../client/common/server/types/types';
 import { exeWithNetLock } from '../../domain/utils/utils';
+import { JOI_NULL } from '../schema/schema';
 
 const create: THandler<INetInviteParams, string | null> = async (
   { member: m },

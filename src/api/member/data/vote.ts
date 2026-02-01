@@ -2,10 +2,9 @@ import Joi from 'joi';
 import { THandler } from '../../../controller/types';
 // eslint-disable-next-line max-len
 import { IMemberConfirmParams } from '../../../client/common/server/types/types';
-import { JOI_NULL } from '../../../controller/constants';
 import { getMemberStatus } from '../../../client/common/server/utils';
 import { NetEvent } from '../../../domain/event/event';
-import { MemberConfirmParamsSchema } from '../../schema/schema';
+import { MemberConfirmParamsSchema, JOI_NULL } from '../../schema/schema';
 
 export const set: THandler<IMemberConfirmParams, boolean | null> = async (
   { member: m },

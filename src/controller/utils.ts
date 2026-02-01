@@ -1,5 +1,6 @@
 import { Writable } from 'node:stream';
 import Joi from 'joi';
+import { JOI_NULL } from '../api/schema/schema';
 import { IEndpoints, TJoiSchema, THandler, THandlerSchema } from './types';
 import { SIMPLE_TYPES } from './constants';
 import * as tpl from './methods/templates';
@@ -61,7 +62,12 @@ export const outputSchemaToSchema = (
 const findPredefinedSchema = (
   apiTypes: Record<string, TJoiSchema>,
   schema: THandlerSchema,
-) => Object.keys(apiTypes).find((key) => apiTypes[key] === schema);
+) => {
+  if (schema === JOI_NULL) {
+    return;
+  }
+  return Object.keys(apiTypes).find((key) => apiTypes[key] === schema);
+};
 
 const getTypes = (
   apiTypes: Record<string, TJoiSchema>,

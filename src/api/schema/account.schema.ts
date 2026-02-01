@@ -4,7 +4,7 @@ import {
   OmitNull,
 } from '../../client/common/server/types/types';
 import { TJoiSchema } from '../../controller/types';
-import { JOI_NULL } from '../../controller/constants';
+import { JOI_NULL } from './index.schema';
 
 export const UserResponseSchema = [
   JOI_NULL,

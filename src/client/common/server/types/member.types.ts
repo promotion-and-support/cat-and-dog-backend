@@ -1,32 +1,27 @@
 import {
-  ITableUsers,
   ITableMembersInvites,
   ITableMembersToMembers,
   ITableMembers,
   ITableNodes,
   OuterJoin,
 } from '../../../local/imports';
+import { IUser } from './types';
 
-export type IUserNode = {
-  node_id: number;
-};
+export type IUserNode = { node_id: number };
 
-export type IMemberNode = {
-  member_id: number;
-};
+export type IMemberNode = { member_id: number };
 
 export type IMemberConfirmParams = IUserNode & IMemberNode;
+
 export type IMemberInviteParams = IMemberConfirmParams & {
   member_name: string;
 };
 
-export type IMemberResponse = Pick<
-  ITableNodes,
-  'node_id' | 'count_of_members'
-> &
-  OuterJoin<Pick<ITableMembers, 'user_id' | 'confirmed'>> &
-  OuterJoin<Pick<ITableUsers, 'name'>> &
-  OuterJoin<Pick<ITableMembersInvites, 'token' | 'member_name'>> &
-  OuterJoin<Pick<ITableMembersToMembers, 'dislike' | 'vote'>> & {
+export type IMember = ITableMembers & IUser;
+
+export type IMemberResponse = ITableNodes &
+  OuterJoin<IMember> &
+  OuterJoin<ITableMembersInvites> &
+  OuterJoin<ITableMembersToMembers> & {
     vote_count: number;
   };

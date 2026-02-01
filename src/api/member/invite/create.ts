@@ -1,8 +1,7 @@
 import Joi from 'joi';
-import { JOI_NULL } from '../../../controller/constants';
 import { THandler } from '../../../controller/types';
 import { IMemberInviteParams } from '../../../client/common/server/types/types';
-import { MemberInviteParamsSchema } from '../../schema/schema';
+import { MemberInviteParamsSchema, JOI_NULL } from '../../schema/schema';
 import { getMemberStatus } from '../../../client/common/server/utils';
 import { exeWithNetLock } from '../../../domain/utils/utils';
 

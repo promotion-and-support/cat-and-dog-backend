@@ -3,10 +3,10 @@ import { INetMember } from './member.types';
 
 export type INet = T.ITableNets & T.ITableNetsData;
 
-export type IUserNet = T.ITableNodes &
-  Pick<T.ITableMembers, 'user_id' | 'confirmed'> &
-  T.ITableNets &
-  Pick<T.ITableNetsData, 'name'>;
+export type IUserNet = T.ITableNets &
+  T.ITableNetsData &
+  T.ITableNodes &
+  T.ITableMembers;
 
 /* net structure */
 export type INetNode = {

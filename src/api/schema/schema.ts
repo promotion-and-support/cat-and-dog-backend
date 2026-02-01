@@ -1,4 +1,5 @@
 export * from './index.schema';
+export * from './node.schema';
 export * from './account.schema';
 export * from './subscription.schema';
 export * from './net.schema';

@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import {
-  IMemberResponse,
   INetCreateParams,
   INetResponse,
   INetsResponse,
@@ -10,8 +9,9 @@ import {
   OmitNull,
 } from '../../client/common/server/types/types';
 import { TJoiSchema } from '../../controller/types';
-import { JOI_NULL } from '../../controller/constants';
+import { JOI_NULL } from './index.schema';
 import { NodeSchema } from './node.schema';
+import { MemberResponseSchema } from './member.schema';
 
 export const NetCreateParamsSchema = {
   node_id: [Joi.number(), JOI_NULL],
@@ -56,19 +56,6 @@ export const NetsResponseSchema = NetResponseSchema[1] as Record<
   keyof INetsResponse[number],
   TJoiSchema
 >;
-
-export const MemberResponseSchema = {
-  node_id: Joi.number(),
-  count_of_members: Joi.number(),
-  user_id: [Joi.number(), JOI_NULL],
-  name: [Joi.string(), JOI_NULL],
-  confirmed: [Joi.boolean(), JOI_NULL],
-  token: [Joi.string(), JOI_NULL],
-  member_name: [Joi.string(), JOI_NULL],
-  dislike: [Joi.boolean(), JOI_NULL],
-  vote: [Joi.boolean(), JOI_NULL],
-  vote_count: Joi.number(),
-} as Record<keyof IMemberResponse, TJoiSchema>;
 
 export const NetViewResponseSchema = { ...MemberResponseSchema };
 

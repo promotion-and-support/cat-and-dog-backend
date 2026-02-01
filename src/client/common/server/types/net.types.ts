@@ -9,7 +9,7 @@ import {
   ITableUsers,
   OuterJoin,
 } from '../../../local/imports';
-import { IMemberResponse, IUserNode } from './member.types';
+import { IMemberResponse, IUserNode, Nullable } from './types';
 
 export type INetCreateParams = Pick<ITableNetsData, 'name'> & {
   node_id: number | null;
@@ -19,11 +19,10 @@ export type INetEnterParams = { net_id: number };
 
 export type INetUpdateParams = IUserNode & { goal: string };
 
-export type INetResponse = (ITableNets & ITableNetsData & ITableNodes) | null;
+export type INetData = ITableNets & ITableNetsData & ITableNodes;
 
-export type INetsResponse = (ITableNets &
-  Pick<ITableNetsData, 'name'> &
-  Pick<ITableNodes, 'node_id' | 'parent_node_id'>)[];
+export type INetResponse = Nullable<INetData>;
+export type INetsResponse = INetData[];
 
 export type INetViewResponse = IMemberResponse[];
 export const NET_VIEW_MAP = ['net', 'tree', 'circle'] as const;
